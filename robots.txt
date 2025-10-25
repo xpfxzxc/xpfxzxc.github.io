@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /_astro/
 
-Sitemap: https://demo-firefly.netlify.app/sitemap-index.xml
+Sitemap: https://xpfxzxc.github.io/sitemap-index.xml
