@@ -1,4 +1,319 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Firefly - Demo site</title><description>Firefly 是一款基于 Astro 框架开发的清新美观且现代化个人博客主题，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。</description><link>https://xpfxzxc.github.io/</link><language>zh_CN</language><item><title>基于 Firefly 主题的 Astro 博客部署（一）：从零到 GitHub Pages</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part1/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part1/</guid><description>记录了自己是如何使用开源的 Firefly 主题，在 GitHub Pages 上从零开始部署基于 Astro 的个人博客。</description><pubDate>Wed, 29 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;前言&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Firefly - Demo site</title><description>Firefly 是一款基于 Astro 框架开发的清新美观且现代化个人博客主题，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。</description><link>https://xpfxzxc.github.io/</link><language>zh_CN</language><item><title>基于 Firefly 主题的 Astro 博客部署（二）：文章发布</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part2/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part2/</guid><description>记录了自己在基于 Firefly 主题的 Astro 博客上，对文章文件各要素的探索与简单总结，并接触到 Front matter 和 Markdown 扩展语法。</description><pubDate>Mon, 03 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;在成功将博客站点部署到 &lt;strong&gt;GitHub Pages&lt;/strong&gt; 上后，我打算暂不修改博客的个人资料（如个人名称、头像、介绍、公告、背景图等），而是先撰写文章再发布，所以首先研究一下这部分。&lt;/p&gt;
+&lt;h2&gt;探索&lt;/h2&gt;
+&lt;p&gt;在博客主页中可以看到，刚部署后的博客自带了几篇示例文章。这些示例文章是 &lt;a href=&quot;https://github.com/CuteLeaf/Firefly&quot;&gt;&lt;strong&gt;Firefly&lt;/strong&gt;&lt;/a&gt; 主题作者特意留下的，里面讲解了在撰写文章时可以用的 &lt;strong&gt;Markdown&lt;/strong&gt; 语法。&lt;/p&gt;
+&lt;h3&gt;文章位置&lt;/h3&gt;
+&lt;p&gt;随便截取其中一篇示例文章中的几个字，然后在 &lt;strong&gt;VSCode&lt;/strong&gt; 中按快捷键 &lt;code&gt;Ctrl+Shift+F&lt;/code&gt; 或点击左侧栏 🔍 打开左侧栏的&lt;code&gt;搜索栏&lt;/code&gt;，将几个字粘贴到&lt;code&gt;搜索框&lt;/code&gt;中，很快就能够在 VSCode 左侧看见示例文章在项目中的具体位置：在 &lt;code&gt;src/content/posts&lt;/code&gt; 目录下。&lt;/p&gt;
+&lt;p&gt;该目录下存放了所有文章，文章也可以存放在子目录中。文章在 &lt;code&gt;src/content/posts&lt;/code&gt; 目录下的相对路径决定其最终的 URL。例如，文件 &lt;code&gt;src/content/posts/firefly/hello-world.md&lt;/code&gt; 对应的访问 URL 为：&lt;code&gt;https://&amp;lt;username&amp;gt;.github.io/posts/firefly/hello-world&lt;/code&gt;（&lt;code&gt;&amp;lt;username&amp;gt;&lt;/code&gt; 需替换成 &lt;strong&gt;GitHub&lt;/strong&gt; 用户名，下文同理）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!TIP]
+创建子目录可以更好地组织文章和资源。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;文章组成&lt;/h3&gt;
+&lt;p&gt;每个文章文件的内容由两部分组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;元数据&lt;/strong&gt;：位于文章文件的开头，为 Markdown 文件本身提供了结构化信息（&lt;strong&gt;YAML&lt;/strong&gt; 格式），由一对 &lt;code&gt;---&lt;/code&gt; 分隔符包裹着&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;文章主体&lt;/strong&gt;：Markdown 格式的正文内容，紧接在元数据下方&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;元数据&lt;/h3&gt;
+&lt;p&gt;从各个示例文章文件里，可以总结出元数据中可使用的字段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;title&lt;/code&gt;（&lt;strong&gt;必填&lt;/strong&gt;）：文章标题&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;published&lt;/code&gt;（&lt;strong&gt;必填&lt;/strong&gt;）：文章发布日期，日期格式 &lt;code&gt;YYYY-MM-DD&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;updated&lt;/code&gt;：文章的最后一次更新日期，日期格式 &lt;code&gt;YYYY-MM-DD&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pinned&lt;/code&gt;：将文章置顶在文章列表顶部&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;description&lt;/code&gt;：文章的简短描述，显示在文章列表里&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;image&lt;/code&gt;：文章封面图片路径，有三种格式：
+&lt;ul&gt;
+&lt;li&gt;以 &lt;code&gt;http&lt;/code&gt; 或 &lt;code&gt;https&lt;/code&gt; 开头：网络图片&lt;/li&gt;
+&lt;li&gt;以 &lt;code&gt;/&lt;/code&gt; 开头：&lt;code&gt;public&lt;/code&gt; 目录下的图片&lt;/li&gt;
+&lt;li&gt;不带任何前缀：相对于 Markdown 文件的路径&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tags&lt;/code&gt;：文章标签，字符串数组格式，例如：&lt;code&gt;[&quot;技术&quot;, &quot;随笔&quot;]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;category&lt;/code&gt;：文章分类&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;licenseName&lt;/code&gt;：文章内容的许可协议的显示名称&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;licenseUrl&lt;/code&gt;：文章内容的许可协议 URL&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;author&lt;/code&gt;：文章作者&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sourceLink&lt;/code&gt;：文章内容的来源链接&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;draft&lt;/code&gt;：将文章标记为草稿。设为 &lt;code&gt;true&lt;/code&gt; 后，文章仅在开发环境下可见，不会包含在最终发布的网站中&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;slug&lt;/code&gt;：自定义文章 URL 的末尾路径。如果未设置，将默认使用文章在 &lt;code&gt;posts&lt;/code&gt; 目录下的相对路径（不含 &lt;code&gt;.md&lt;/code&gt; 扩展名）作为路径&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lang&lt;/code&gt;：仅当文章语言与 &lt;code&gt;config.ts&lt;/code&gt; 文件中的网站语言不同时需要设置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;字段的值即为该行冒号（：）之后的所有内容，因此通常无需使用引号。&lt;/p&gt;
+&lt;p&gt;以下是一篇示例文章中的片段：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+title: Firefly 简单使用指南
+published: 2025-10-11
+pinned: true
+description: &quot;如何使用 Firefly 博客模板。&quot;
+image: &quot;./cover.webp&quot;
+tags: [&quot;Firefly&quot;, &quot;博客&quot;, &quot;Markdown&quot;, &quot;使用指南&quot;]
+category: 博客指南
+draft: true
+---
+
+这个博客模板是基于 [Astro](https://astro.build/) 构建的。对于本指南中未提及的内容，您可以在 [Astro 文档](https://docs.astro.build/) 中找到答案。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;实操&lt;/h2&gt;
+&lt;p&gt;了解了以上信息后，就可以开始撰写文章并发布了。不过，我打算先将自带的示例文章标记为草稿，保留而不是删除这些示例文章。这样，如果以后在撰写文章的过程中，一时想不起元数据或 Markdown 语法，那么可以在这些示例文章中查阅。&lt;/p&gt;
+&lt;h3&gt;步骤&lt;/h3&gt;
+&lt;h4&gt;1. 标记示例文章为草稿&lt;/h4&gt;
+&lt;p&gt;用 VSCode 打开本地项目，手动将在 &lt;code&gt;src/content/posts&lt;/code&gt; 目录下的所有示例文章文件中元数据里的 &lt;code&gt;draft: false&lt;/code&gt; 改为 &lt;code&gt;draft: true&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;接着在项目目录下运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add .
+git commit -m &quot;chore: 标记自带的文章为草稿&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;2. 撰写文章&lt;/h4&gt;
+&lt;p&gt;注意到项目目录下的 &lt;code&gt;package.json&lt;/code&gt; 文件里有可执行的脚本：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  &quot;scripts&quot;: {
+    &quot;new-post&quot;: &quot;node scripts/new-post.js&quot;
+  }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;打开 &lt;code&gt;scripts/new-post.js&lt;/code&gt; 文件，研究代码后知道：它接收文件名参数，并在 &lt;code&gt;src/content/posts&lt;/code&gt; 目录下生成仅包含元数据模板的文章文件。&lt;/p&gt;
+&lt;p&gt;在项目目录下运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pnpm run new-post astro-firefly-blog-deploy/part1.md
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这将在 &lt;code&gt;src/content/posts&lt;/code&gt; 目录下创建子目录 &lt;code&gt;astro-firefly-blog-deploy&lt;/code&gt;，并在该子目录下创建文章文件 &lt;code&gt;part1.md&lt;/code&gt;。这文章文件包含着初始元数据模板：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+title: part1.md
+published: 2025-10-30
+description: &apos;&apos;
+image: &apos;&apos;
+tags: []
+category: &apos;&apos;
+draft: false 
+lang: &apos;&apos;
+---
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;通过 URL 路径 &lt;code&gt;/posts/astro-firefly-blog-deploy/part1&lt;/code&gt; 访问到该文章。&lt;/p&gt;
+&lt;p&gt;为了避免使用嵌套过多的 URL 子路径，添加 &lt;code&gt;slug: astro-firefly-blog-deploy-part1&lt;/code&gt; 到元数据块里。这样，可以通过 URL 路径 &lt;code&gt;/posts/astro-firefly-blog-deploy-part1&lt;/code&gt; 访问到该文章。&lt;/p&gt;
+&lt;h4&gt;3. 发布文章&lt;/h4&gt;
+&lt;p&gt;修改元数据，并撰写文章主体后，就可以将文章发布出去了。&lt;/p&gt;
+&lt;p&gt;在项目目录下运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add .
+git commit -m &quot;feat: 添加文章 &apos;基于 Firefly 主题的 Astro 博客部署（一）：从零到 GitHub Pages&apos;&quot;
+git push origin custom
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;扩展内容：Front Matter&lt;/h2&gt;
+&lt;p&gt;在与 AI 沟通元数据相关内容的时候，注意到 AI 对这些元数据的格式和使用的单词颇为熟悉。经过深入询问才知道：其实前面所说的元数据有个标准名称叫做 &lt;strong&gt;Front Matter&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3&gt;定义&lt;/h3&gt;
+&lt;p&gt;Front Matter 是位于文件（通常是 Markdown 或 &lt;strong&gt;HTML&lt;/strong&gt; 文件）顶部区域的一段特定格式（通常是 YAML 格式）的代码块，文件正文就写在这个 Front Matter 块的下方。&lt;/p&gt;
+&lt;h3&gt;作用&lt;/h3&gt;
+&lt;p&gt;用于为文章或页面定义元数据，告知静态网站生成器如何处理这些文件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;内容和页面分离：无需改动模板代码，就能通过简单的键值对控制每个页面的行为和展示方式&lt;/li&gt;
+&lt;li&gt;驱动网站生成
+&lt;ul&gt;
+&lt;li&gt;为文章排序（根据 &lt;code&gt;date&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;生成标签页和分类页（根据 &lt;code&gt;tags&lt;/code&gt; 和 &lt;code&gt;category&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;在列表中显示文章标题、摘要和封面（根据 &lt;code&gt;title&lt;/code&gt;、&lt;code&gt;description&lt;/code&gt; 和 &lt;code&gt;image&lt;/code&gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;控制构建行为：像 &lt;code&gt;draft: true&lt;/code&gt; 这样的键值对告知生成器：“这篇文章是草稿，在正式构建时请忽略它”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;扩展内容：从文章文件到文章展示&lt;/h2&gt;
+&lt;p&gt;已经知道 Firefly 主题项目里 &lt;code&gt;src/content/posts&lt;/code&gt; 目录存放着文章内容。在构建静态站点时，Astro 会为非草稿文章逐一生成对应的 HTML 页面和路由。要进一步了解这个过程是如何在代码中体现的，就需要对 Astro 框架的相关知识有所了解。&lt;/p&gt;
+&lt;h3&gt;官方文档相关资料&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.astro.build/en/basics/astro-pages/&quot;&gt;页面&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.astro.build/en/guides/routing/&quot;&gt;路由&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.astro.build/en/basics/astro-components/&quot;&gt;组件&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.astro.build/en/guides/content-collections/&quot;&gt;内容集合&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.astro.build/en/reference/astro-syntax/&quot;&gt;模板表达式参考&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.astro.build/en/guides/upgrade-to/v5/#legacy-v20-content-collections-api&quot;&gt;旧版：v2.0 内容集合 API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;解析项目代码&lt;/h3&gt;
+&lt;p&gt;接下来，将结合 Astro 的相关知识点，来解析项目代码。&lt;/p&gt;
+&lt;h4&gt;页面文件&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;src/pages&lt;/code&gt; 目录下的文件（支持 &lt;code&gt;.astro&lt;/code&gt;、&lt;code&gt;.ts&lt;/code&gt; 等格式）会被 Astro 自动识别为&lt;strong&gt;页面&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;下面展示了项目 &lt;code&gt;src/pages&lt;/code&gt; 目录的实际结构，其中的每一个文件都对应一个或多个页面：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;src/pages/
+├── 404.astro
+├── [...page].astro
+├── about.astro
+├── anime.astro
+├── archive.astro
+├── friends.astro
+├── og/
+│   └── [...slug].png.ts
+├── posts/
+│   └── [...slug].astro
+├── robots.txt.ts
+├── rss.astro
+└── rss.xml.ts
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;静态路由&lt;/h4&gt;
+&lt;p&gt;Astro 使用基于文件的路由，根据项目 &lt;code&gt;src/pages&lt;/code&gt; 目录下的文件结构来构建链接，自动将它们作为网站页面。&lt;/p&gt;
+&lt;p&gt;这意味着，虽然 Astro 项目没有单独的路由配置，但依然可以通过页面文件在 &lt;code&gt;src/pages&lt;/code&gt; 目录中的路径推断出最终生成的路由。例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mysite.com/about -&amp;gt; src/pages/about.astro
+mysite.com/404   -&amp;gt; src/pages/404.astro
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;注：像 &lt;code&gt;[...slug].astro&lt;/code&gt; 这样采用特殊命名的页面文件属于&lt;strong&gt;动态路由&lt;/strong&gt;，不属于&lt;strong&gt;静态路由&lt;/strong&gt;的范畴。&lt;/p&gt;
+&lt;h4&gt;组件脚本&lt;/h4&gt;
+&lt;p&gt;以 &lt;code&gt;.astro&lt;/code&gt; 为后缀的文件是 Astro 组件，每个 Astro 组件由&lt;strong&gt;组件脚本&lt;/strong&gt;和&lt;strong&gt;组件模板&lt;/strong&gt;两部分组成。&lt;/p&gt;
+&lt;p&gt;Astro 使用代码围栏 &lt;code&gt;---&lt;/code&gt; 来识别组件脚本部分。虽然这种语法形式与 Front Matter 相似，但是两者作用不同：组件脚本内编写的是 &lt;strong&gt;TypeScript&lt;/strong&gt; 代码，而非元数据。&lt;/p&gt;
+&lt;p&gt;后续会提到组件脚本中的一些作用和组件模板的一些语法。&lt;/p&gt;
+&lt;h4&gt;动态路由&lt;/h4&gt;
+&lt;p&gt;类似 &lt;code&gt;[...slug].astro&lt;/code&gt; 这样文件名中包含方括号的 Astro 组件用于实现动态路由。这类文件根据传入的动态参数，将文件名内方括号对应的部分替换为具体的参数值，生成对应的多个路由和匹配页面。&lt;/p&gt;
+&lt;p&gt;例如，对于 &lt;code&gt;src/pages/posts/[category]/[post].astro&lt;/code&gt; 文件，当传入参数 &lt;code&gt;{ category: &apos;demo&apos;, post: &apos;hello-world&apos; }&lt;/code&gt; 时，将会生成如下路由：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mysite.com/pages/posts/demo/hello-world -&amp;gt; src/pages/posts/[category]/[post].astro
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;剩余参数&lt;/strong&gt;（例如：&lt;code&gt;[...slug]&lt;/code&gt;）可以匹配任何深度的文件路径。&lt;/p&gt;
+&lt;p&gt;项目中 &lt;code&gt;src/pages/posts&lt;/code&gt; 目录下的 &lt;code&gt;[...slug].astro&lt;/code&gt; 文件，自然地令人联想到文章页面的生成和路由跟这页面文件有关，且动态路由参数的值与 &lt;code&gt;slug&lt;/code&gt; 的值有关。&lt;/p&gt;
+&lt;p&gt;在&lt;strong&gt;静态站点生成&lt;/strong&gt;模式下，因为必须在构建时确定所有路由。所以，在组件的脚本部分中，需要通过导出 &lt;code&gt;getStaticPaths()&lt;/code&gt; 函数来指定所有可能的参数组合。该函数返回一个对象数组，其中每个对象的 &lt;code&gt;param&lt;/code&gt; 字段定义了 &lt;code&gt;slug&lt;/code&gt; 参数的具体取值。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// ...
+export async function getStaticPaths() {
+  const blogEntries = await getSortedPosts();
+  return blogEntries.map((entry) =&amp;gt; ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这代码片段对应了之前提到的：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;通过修改文章元数据里的 &lt;code&gt;slug&lt;/code&gt; 字段值，能够更改文章的访问路径&lt;/li&gt;
+&lt;li&gt;组件脚本的作用之一是通过导出特定函数，向框架提供所需信息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;内容集合&lt;/h4&gt;
+&lt;p&gt;根据前面的分析，文章内容存储在 &lt;code&gt;src/pages&lt;/code&gt; 目录之外，这意味着默认情况下不会为内容生成页面和路由。文章页面的生成好像跟 &lt;code&gt;src/content/posts&lt;/code&gt; 目录无关。那么，Astro 是如何定位文章文件、并为每篇文章生成对应的页面和路由的呢？&lt;/p&gt;
+&lt;p&gt;答案是通过&lt;strong&gt;内容集合&lt;/strong&gt;。通过将 &lt;code&gt;src/content/posts&lt;/code&gt; 目录定义为内容集合，让 Astro 统一管理其中的内容，每篇博客文章都作为该集合中的一个条目。&lt;/p&gt;
+&lt;p&gt;Astro 会自动扫描 &lt;code&gt;src/content&lt;/code&gt; 目录下的所有子目录，将每个子目录识别为一个独立的内容集合。通过在 &lt;code&gt;src/content&lt;/code&gt; 目录下添加 &lt;code&gt;config.ts&lt;/code&gt; 文件，可以定义 &lt;strong&gt;Schema&lt;/strong&gt; 来规范集合中内容的 Front Matter 或条目数据，这些 Schema 会通过 &lt;strong&gt;Zod&lt;/strong&gt; 进行数据验证，确保数据格式的一致性。&lt;/p&gt;
+&lt;p&gt;项目中 &lt;code&gt;src/content/config.ts&lt;/code&gt; 文件内容如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import { defineCollection, z } from &quot;astro:content&quot;;
+
+const postsCollection = defineCollection({
+	schema: z.object({
+		title: z.string(),
+		published: z.date(),
+		updated: z.date().optional(),
+		draft: z.boolean().optional().default(false),
+		description: z.string().optional().default(&quot;&quot;),
+		image: z.string().optional().default(&quot;&quot;),
+		tags: z.array(z.string()).optional().default([]),
+		category: z.string().optional().nullable().default(&quot;&quot;),
+		lang: z.string().optional().default(&quot;&quot;),
+		pinned: z.boolean().optional().default(false),
+		author: z.string().optional().default(&quot;&quot;),
+		sourceLink: z.string().optional().default(&quot;&quot;),
+		licenseName: z.string().optional().default(&quot;&quot;),
+		licenseUrl: z.string().optional().default(&quot;&quot;),
+
+		/* Page encryption fields */
+		encrypted: z.boolean().optional().default(false),
+		password: z.string().optional().default(&quot;&quot;),
+
+		series: z.string().optional(),
+
+		/* For internal use */
+		prevTitle: z.string().default(&quot;&quot;),
+		prevSlug: z.string().default(&quot;&quot;),
+		nextTitle: z.string().default(&quot;&quot;),
+		nextSlug: z.string().default(&quot;&quot;),
+	}),
+});
+const specCollection = defineCollection({
+	schema: z.object({}),
+});
+export const collections = {
+	posts: postsCollection,
+	spec: specCollection,
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Astro 提供了辅助函数 &lt;code&gt;getCollection()&lt;/code&gt;，用于获取指定集合的全部内容，并以数组形式返回所有条目。&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;src/pages/posts/[...slug].astro&lt;/code&gt; 文件中，通过调用了 &lt;code&gt;getSortedPosts()&lt;/code&gt; 函数间接使用了 &lt;code&gt;getCollection()&lt;/code&gt; 函数，最终获得了经过排序的博客文章数组。&lt;/p&gt;
+&lt;p&gt;以下是第一篇博客文章的条目结构：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  id: &apos;astro-firefly-blog-deploy/part1.md&apos;,
+  data: {
+    title: &apos;基于 Firefly 主题的 Astro 博客部署（一）：从零到 GitHub Pages&apos;,
+    published: 2025-10-29T00:00:00.000Z,
+    draft: false,
+    description: &apos;记录了自己是如何使用开源的 Firefly 主题，在 GitHub Pages 上从零开始部署基于 Astro 的个人博客。&apos;,
+    image: &apos;&apos;,
+    tags: [
+      &apos;博客部署&apos;,
+      &apos;Astro&apos;,
+      &apos;Firefly&apos;,
+      &apos;开源主题&apos;,
+      &apos;GitHub Pages&apos;,
+      &apos;GitHub Actions&apos;,
+      &apos;Git&apos;
+    ],
+    category: &apos;实操记录&apos;,
+    lang: &apos;&apos;,
+    pinned: false,
+    author: &apos;&apos;,
+    sourceLink: &apos;&apos;,
+    licenseName: &apos;&apos;,
+    licenseUrl: &apos;&apos;,
+    encrypted: false,
+    password: &apos;&apos;,
+    prevTitle: &apos;&apos;,
+    prevSlug: &apos;&apos;,
+    nextTitle: &apos;&apos;,
+    nextSlug: &apos;&apos;
+  },
+  body: &apos;## 前言\r\n&apos; +
+    &apos;\r\n&apos; +
+    &apos;...&apos;,
+  filePath: &apos;src/content/posts/astro-firefly-blog-deploy/part1.md&apos;,
+  digest: &apos;474c5b5ac94b1108&apos;,
+  rendered: {
+    html: &apos;&amp;lt;section&amp;gt;&amp;lt;h2 id=&quot;前言&quot;&amp;gt;前言&amp;lt;a class=&quot;anchor&quot; href=&quot;#前言&quot;&amp;gt;....&apos;,
+    metadata: {
+      headings: [Array],
+      localImagePaths: [],
+      remoteImagePaths: [],
+      frontmatter: [Object],
+      imagePaths: []
+    }
+  },
+  collection: &apos;posts&apos;,
+  slug: &apos;astro-firefly-blog-deploy-part1&apos;,
+  render: [Function: render]
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;观察上面的条目可以发现，虽然文章文件路径为 &lt;code&gt;src/content/posts/astro-firefly-blog-deploy/part1.md&lt;/code&gt;，但其 &lt;code&gt;slug&lt;/code&gt; 字段的值为 &lt;code&gt;astro-firefly-blog-deploy-part1&lt;/code&gt;。值得注意的是，尽管在 &lt;code&gt;src/content/config.ts&lt;/code&gt; 文件中的 Scheme 中并未定义 &lt;code&gt;slug&lt;/code&gt; 字段，但仍然成功获取到了文章 Front Matter 中设置的 &lt;code&gt;slug&lt;/code&gt; 值。&lt;/p&gt;
+&lt;p&gt;由于 &lt;code&gt;slug&lt;/code&gt; 字段与 &lt;code&gt;data&lt;/code&gt; 字段处于同一层级，猜测 Astro 会自动提取 Front Matter 中的 &lt;code&gt;slug&lt;/code&gt; 字段值。这点可以通过检查其他未设置 &lt;code&gt;slug&lt;/code&gt; 值的文章条目，观察其行为差异来验证。&lt;/p&gt;
+&lt;p&gt;在动态路由的实现中，通过在组件脚本中导出 &lt;code&gt;getStaticPaths()&lt;/code&gt; 函数，其中该函数返回包含 &lt;code&gt;params&lt;/code&gt; 字段的对象数组，每个 &lt;code&gt;params&lt;/code&gt; 对象都包含一个 &lt;code&gt;slug&lt;/code&gt; 字段。这意味着，通过修改文章 Front Matter 中的 &lt;code&gt;slug&lt;/code&gt; 值，能够控制文章最终生成的访问路径。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!NOTE]
+在撰写本文章的时候，虽然 Firefly 主题使用的 Astro 版本是 &lt;code&gt;5.15.3&lt;/code&gt;，但是它使用的内容集合 API 是旧版的。Astro 5 引入了内容层 API 用于替代旧的版本 API。例如，在 Astro 5 中，要定义集合，必须在项目中创建 &lt;code&gt;src/content.config.ts&lt;/code&gt; 文件，且在使用 &lt;code&gt;defineCollection()&lt;/code&gt; 函数的时候必须配置 &lt;code&gt;loader&lt;/code&gt; 用于加载数据源。再比如，渲染方法 &lt;code&gt;entry.render()&lt;/code&gt; 被 &lt;code&gt;render(entry)&lt;/code&gt; 函数取代。如果在项目里 &lt;code&gt;src/content/config.ts&lt;/code&gt; 文件中强行添加 &lt;code&gt;loader: glob({ ... })&lt;/code&gt;，也就启用了 Astro 5 的新内容层 API，这导致项目里 &lt;code&gt;entry.render()&lt;/code&gt; 调用失败。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;变量注入&lt;/h4&gt;
+&lt;p&gt;根据前面的分析，文章条目对象的 &lt;code&gt;data&lt;/code&gt; 字段中存储着文章元数据。&lt;/p&gt;
+&lt;p&gt;组件脚本的另一个重要作用是创建可在模板中使用的变量。这些变量通过 Astro 的组件模板语法在组件模板中被引用。&lt;/p&gt;
+&lt;p&gt;具体实现的过程如下：将文章条目对象通过 &lt;code&gt;getStaticPaths()&lt;/code&gt; 函数返回对象的 &lt;code&gt;props&lt;/code&gt; 字段传入后，可以在组件脚本里通过 &lt;code&gt;Astro.props&lt;/code&gt; 获取该对象，并基于其声明变量。随后，可以使用类似 JSX 语法在组件模板中使用。&lt;/p&gt;
+&lt;p&gt;通过在组件模板中使用组件脚本中定义的数据和值，最终生成动态创建的 HTML：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// ...
+export async function getStaticPaths() {
+  const blogEntries = await getSortedPosts();
+  return blogEntries.map((entry) =&amp;gt; ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+// ...
+
+---
+&amp;lt;MainGridLayout
+  banner={entry.data.image}
+  title={entry.data.title}
+  description={entry.data.description}
+  lang={entry.data.lang}
+  setOGTypeArticle={true}
+  postSlug={entry.slug}
+  headings={headings}
+&amp;gt;
+&amp;lt;!-- ... --&amp;gt;
+&amp;lt;/MainGridLayout&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</content:encoded></item><item><title>基于 Firefly 主题的 Astro 博客部署（一）：从零到 GitHub Pages</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part1/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part1/</guid><description>记录了自己是如何使用开源的 Firefly 主题，在 GitHub Pages 上从零开始部署基于 Astro 的个人博客。</description><pubDate>Wed, 29 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;前言&lt;/h2&gt;
 &lt;p&gt;前几天，我像平时一样在网站 &lt;a href=&quot;https://linux.do/&quot;&gt;&lt;strong&gt;LINUX DO&lt;/strong&gt;&lt;/a&gt; 上逛帖子，偶然看到有人开源了一个名为 &lt;strong&gt;Firefly&lt;/strong&gt; 的博客主题模板。在查看了主题的预览效果图并访问了演示站点后，我认为它设计精致、外观美观，且集成了众多的实用功能。&lt;/p&gt;
 &lt;p&gt;::github{repo=&quot;CuteLeaf/Firefly&quot;}&lt;/p&gt;
 &lt;h3&gt;回顾&lt;/h3&gt;
