@@ -1,1 +1,210 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Firefly - Demo site</title><description>Firefly 是一款基于 Astro 框架开发的清新美观且现代化个人博客主题，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。</description><link>https://xpfxzxc.github.io/</link><language>zh_CN</language></channel></rss>
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Firefly - Demo site</title><description>Firefly 是一款基于 Astro 框架开发的清新美观且现代化个人博客主题，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。</description><link>https://xpfxzxc.github.io/</link><language>zh_CN</language><item><title>基于 Firefly 主题的 Astro 博客部署（一）：从零到 GitHub Pages</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part1/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part1/</guid><description>记录了自己是如何使用开源的 Firefly 主题，在 GitHub Pages 上从零开始部署基于 Astro 的个人博客。</description><pubDate>Wed, 29 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;前言&lt;/h2&gt;
+&lt;p&gt;前几天，我像平时一样在网站 &lt;a href=&quot;https://linux.do/&quot;&gt;&lt;strong&gt;LINUX DO&lt;/strong&gt;&lt;/a&gt; 上逛帖子，偶然看到有人开源了一个名为 &lt;strong&gt;Firefly&lt;/strong&gt; 的博客主题模板。在查看了主题的预览效果图并访问了演示站点后，我认为它设计精致、外观美观，且集成了众多的实用功能。&lt;/p&gt;
+&lt;p&gt;::github{repo=&quot;CuteLeaf/Firefly&quot;}&lt;/p&gt;
+&lt;h3&gt;回顾&lt;/h3&gt;
+&lt;p&gt;我回顾了下过去的几年经历：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;学过不少编程知识，但大部分现在都忘了&lt;/li&gt;
+&lt;li&gt;曾经有过主动总结知识的想法，但苦于不知将记录存放到哪里&lt;/li&gt;
+&lt;li&gt;曾经有过搭建个人博客的想法，但一直未付诸实践，甚至觉得没必要&lt;/li&gt;
+&lt;li&gt;今年频繁与 AI 交流，许多问题反复提问，相关知识点也被反复提及，但我仍未记住；相关问题和回答分散到各网站上，不方便去检索&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;需求&lt;/h3&gt;
+&lt;p&gt;想了想，现在是时候去试着部署个人博客玩玩了！我的需求很简单：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;快速开始，且可定制化&lt;/li&gt;
+&lt;li&gt;界面风格现代，外观精美&lt;/li&gt;
+&lt;li&gt;无需支付服务器和域名的费用&lt;/li&gt;
+&lt;li&gt;不想太多人关注我的博客&lt;/li&gt;
+&lt;li&gt;不想在不知名的网站上写博客&lt;/li&gt;
+&lt;li&gt;能够获取主题更新&lt;/li&gt;
+&lt;li&gt;以后能为主题贡献代码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;平台选择&lt;/h2&gt;
+&lt;p&gt;根据需求，与 AI 沟通并查阅相关资料后，我觉得可以借助该开源项目在 &lt;strong&gt;GitHub Pages&lt;/strong&gt; 上部署个人博客网站。&lt;/p&gt;
+&lt;p&gt;我进行了以下几方面的考虑，最终选择将 GitHub Pages 作为博客托管平台。&lt;/p&gt;
+&lt;h3&gt;完全免费&lt;/h3&gt;
+&lt;p&gt;GitHub Pages 对公开仓库免费提供静态网站托管服务，无需支付服务器或流量费用。我不用再操心服务器域名的费用，同时也让网站启用了 &lt;strong&gt;HTTPS&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3&gt;长期稳定&lt;/h3&gt;
+&lt;p&gt;近几年，伴随大语言模型的冲击，问答社区、博客等网站，比如：&lt;strong&gt;CSDN&lt;/strong&gt;、&lt;strong&gt;简书&lt;/strong&gt;、&lt;strong&gt;StackOverflow&lt;/strong&gt; 等网站迅速走向衰弱。然而，&lt;strong&gt;GitHub&lt;/strong&gt; 作为代码托管平台反而越来越火。从长远来看，GitHub 会倒闭的可能性极低。&lt;/p&gt;
+&lt;h3&gt;与 GitHub 无缝集成&lt;/h3&gt;
+&lt;p&gt;博客网站、博客内容以文件以代码形式存在，天然支持版本控制。借助 GitHub 页面 UI 和 &lt;strong&gt;Git&lt;/strong&gt;，可以很好地处理好各方的远程仓库和本地仓库的版本控制。GitHub 自带的 &lt;strong&gt;Discussion&lt;/strong&gt; 又能免费地作为博客文章的讨论区。&lt;/p&gt;
+&lt;h3&gt;部署简单，可自动化&lt;/h3&gt;
+&lt;p&gt;只需将静态文件推送到远程仓库指定的分支，GitHub 就会自动构建并发布。更进一步，允许借助 &lt;strong&gt;GitHub Actions&lt;/strong&gt; 自定义自动化流程。&lt;/p&gt;
+&lt;h2&gt;实操&lt;/h2&gt;
+&lt;p&gt;我打算先让博客上线运行，之后再逐步调整。&lt;/p&gt;
+&lt;h3&gt;思路&lt;/h3&gt;
+&lt;p&gt;作为博客网站，最重要的是展示博客文章内容。博客文章内容相对稳定，除非博主更新文章，不然用户反复刷新网页，网页的内容也不会变化。用户通常是通过点击链接，从一个页面跳转到另一个页面，几乎不需要再进行额外的复杂交互。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://astro.build/&quot;&gt;&lt;strong&gt;Astro&lt;/strong&gt;&lt;/a&gt; 作为静态站点生成器，构建时生成的 &lt;strong&gt;HTML&lt;/strong&gt; 文件可直接放到免费的托管平台上运行，不需要服务器。生成的网页不带多余的 &lt;strong&gt;JavaScript&lt;/strong&gt;（可以按需加载），加载速度飞快，对 &lt;strong&gt;SEO&lt;/strong&gt; 友好。由此可见，Astro 很适配我的需求。&lt;/p&gt;
+&lt;p&gt;关于仓库的版本控制和管理：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;我想能轻松拉取原 Firefly 代码的更改，所以需要先 &lt;code&gt;fork&lt;/code&gt; 一份到我的仓库。&lt;/li&gt;
+&lt;li&gt;我想能定制化代码、发表博客文章，所以需要 &lt;code&gt;clone&lt;/code&gt; 到本地仓库。&lt;/li&gt;
+&lt;li&gt;我想能选择性地获取原 Firefly 代码的更新、定制化代码、发表博客内容，所以需要新建分支 &lt;code&gt;custom&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;我想以后能贡献代码给原 Firefly，所以不能改动主分支 &lt;code&gt;master&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;我想将 &lt;code&gt;https://&amp;lt;username&amp;gt;.github.io&lt;/code&gt; 作为我的博客主页，所以我需要新建仓库 &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;（将 &lt;code&gt;&amp;lt;username&amp;gt;&lt;/code&gt; 替换为 GitHub 用户名，下文同理）。&lt;/li&gt;
+&lt;li&gt;我想让我对博客网站的更改，能自动被推送到线上，所以我需要在我的 Fork 仓库配置一个 GitHub Actions 工作流：每当向我的 Fork 仓库推送代码时，GitHub Actions 会自动构建静态网站，并将生成的文件推送到 &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt; 仓库，从而更新线上站点。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;思路理清了后，就开始动手实操了。&lt;/p&gt;
+&lt;h3&gt;步骤&lt;/h3&gt;
+&lt;h4&gt;1. 创建仓库 &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;在创建仓库页面中，依次填入以下内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Repository name&lt;/code&gt;：&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Description&lt;/code&gt;：&lt;code&gt;Personal blog website hosted on GitHub Pages&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;直接点击 &lt;code&gt;Create Repository&lt;/code&gt; 按钮创建仓库，无需调整其他选项。&lt;/p&gt;
+&lt;h4&gt;2. &lt;code&gt;Fork&lt;/code&gt; 原项目到我的仓库&lt;/h4&gt;
+&lt;p&gt;打开项目 &lt;a href=&quot;https://github.com/CuteLeaf/Firefly&quot;&gt;&lt;strong&gt;Firefly&lt;/strong&gt;&lt;/a&gt; 主页，点击页面右上角的 &lt;code&gt;Fork&lt;/code&gt; 按钮，无需修改任何选项，直接点击 &lt;code&gt;Create fork&lt;/code&gt; 按钮即可。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!NOTE]
+原项目使用 &lt;code&gt;master&lt;/code&gt; 作为默认分支，而非现在常见的 &lt;code&gt;main&lt;/code&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;3. 将我的 Fork 仓库 &lt;code&gt;clone&lt;/code&gt; 到本地&lt;/h4&gt;
+&lt;p&gt;在项目目录下运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git clone git@github.com:&amp;lt;username&amp;gt;/Firefly.git
+code Firefly
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这将用 &lt;strong&gt;VSCode&lt;/strong&gt; 打开刚拉取下来的项目。&lt;/p&gt;
+&lt;h4&gt;4. 在本地仓库创建并切换到 &lt;code&gt;custom&lt;/code&gt; 分支&lt;/h4&gt;
+&lt;p&gt;在项目目录下运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git branch custom
+git checkout custom
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;5. 禁用会报错的 workflow 文件&lt;/h4&gt;
+&lt;p&gt;在实操过程中，我发现 &lt;code&gt;.github/workflows&lt;/code&gt; 目录下工作流文件 &lt;code&gt;biome.yml&lt;/code&gt; 和 &lt;code&gt;build.yml&lt;/code&gt; 运行时会报错。考虑到后续可能需要修改，暂不删除，而是通过在文件名末尾添加 &lt;code&gt;.disabled&lt;/code&gt; 后缀来禁用它们。&lt;/p&gt;
+&lt;h4&gt;6. 修改 workflow 文件以自动部署到另一个仓库&lt;/h4&gt;
+&lt;p&gt;根据之前的思路：每当接收到推送事件时，自动构建静态网站，并将生成的文件推送到 &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt; 仓库。&lt;/p&gt;
+&lt;p&gt;需要修改 &lt;code&gt;.github/workflows&lt;/code&gt; 目录下的 &lt;code&gt;deploy.yml&lt;/code&gt; 文件：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;name: Deploy to Pages Branch
+
+on:
+-  # 每次推送到 `main` 分支时触发这个&quot;工作流程&quot;
+-  # 如果你使用了别的分支名，请按需将 `main` 替换成你的分支名
++  # 每次推送到 `custom` 分支时触发这个&quot;工作流程&quot;
+  push:
+-    branches: [ main ]
++    branches: [ custom ]
+  # 允许你在 GitHub 上的 Actions 标签中手动触发此&quot;工作流程&quot;
+  workflow_dispatch:
+
+# 需要写入权限来推送到pages分支
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: &apos;20&apos;
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+          run_install: false
+          
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+      
+      - name: Build site
+        run: pnpm run build
+      
+      - name: Deploy to pages branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+-          branch: pages # 部署到pages分支
++          token: ${{ secrets.GH_PAT }} # 需要在仓库的Settings-&amp;gt;Secrets and variables-&amp;gt;Actions中添加GH_PAT，该Token需要有写入权限
++          repository-name: &amp;lt;username&amp;gt;/&amp;lt;username&amp;gt;.github.io # 你的GitHub Pages仓库名称
++          branch: main # 部署到custom分支
+          folder: dist # Astro默认构建输出目录
+          clean: true # 清理目标分支中的旧文件
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;7. 创建 &lt;strong&gt;PAT&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;点击 GitHub 账号右上角头像 → 选择 &lt;code&gt;Settings&lt;/code&gt; → 左侧边栏点击 &lt;code&gt;Developer settings&lt;/code&gt; → 点击 &lt;code&gt;Personal access tokens&lt;/code&gt; → 选择 &lt;code&gt;Fine-grained tokens&lt;/code&gt; → 点击右侧 &lt;code&gt;Generate new token&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;在创建页面中，依次填写以下内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Token name&lt;/code&gt;： 为令牌命名（如：&lt;code&gt;blog-deploy&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Expiration&lt;/code&gt;： 设置过期时间（如：&lt;code&gt;90 days&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Repository access&lt;/code&gt;：选择 &lt;code&gt;Only select repositories&lt;/code&gt;，并仅勾选 &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Permissions&lt;/code&gt;：点击 &lt;code&gt;Add permissions&lt;/code&gt;，添加以下三项权限：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Contents&lt;/code&gt; → 设为 &lt;code&gt;Read and write&lt;/code&gt;（用于更改仓库内容）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Pages&lt;/code&gt; → 设为 &lt;code&gt;Read and write&lt;/code&gt;（用于部署 GitHub Pages）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Metadata&lt;/code&gt; → 保持默认（&lt;code&gt;Read-only&lt;/code&gt;，自动包含）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这样可避免生成的令牌可访问的仓库范围过广或权限过大。&lt;/p&gt;
+&lt;p&gt;点击 &lt;code&gt;Generate token&lt;/code&gt; 按钮，并记录下生成的令牌。&lt;/p&gt;
+&lt;h4&gt;8. 创建环境变量&lt;/h4&gt;
+&lt;p&gt;在我的 Fork 仓库页面，点击顶部导航栏的 &lt;code&gt;Settings&lt;/code&gt; → 左侧边栏点击 &lt;code&gt;Secrets and variables&lt;/code&gt; → 选择下拉项 &lt;code&gt;Actions&lt;/code&gt; → 点击右侧 &lt;code&gt;New repository secret&lt;/code&gt; 按钮。&lt;/p&gt;
+&lt;p&gt;在创建页面中，依次填写以下内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Name&lt;/code&gt;：&lt;code&gt;GH_PAT&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Secret&lt;/code&gt;：粘贴刚才保存的令牌&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;点击 &lt;code&gt;Add secret&lt;/code&gt; 按钮。&lt;/p&gt;
+&lt;h4&gt;9. 修改部署地址&lt;/h4&gt;
+&lt;p&gt;根据 Astro 官方文档里的&lt;a href=&quot;https://docs.astro.build/en/guides/deploy/github/&quot;&gt;部署指南&lt;/a&gt;，需要将 &lt;code&gt;astro.config.mjs&lt;/code&gt; 文件里的 &lt;code&gt;site&lt;/code&gt; 改成 GitHub Pages 部署地址：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;export default defineConfig({
+-    site: &quot;https://demo-firefly.netlify.app/&quot;,
++    site: &quot;https://&amp;lt;username&amp;gt;.github.io&quot;,
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;10. 添加 &lt;code&gt;.nojekyll&lt;/code&gt; 文件&lt;/h4&gt;
+&lt;p&gt;在使用 Astro 构建项目时，Astro 会在 &lt;code&gt;dist&lt;/code&gt; 输出目录中生成一个 &lt;code&gt;_astro&lt;/code&gt; 文件夹，其中包含 JavaScript 代码和静态资源。&lt;/p&gt;
+&lt;p&gt;GitHub Pages 对于基于分支自动构建的方式，会默认启用 &lt;strong&gt;Jekyll&lt;/strong&gt; 构建引擎，而 Jekyll 会自动忽略所有以下划线 &lt;code&gt;_&lt;/code&gt; 开头的文件和目录。&lt;/p&gt;
+&lt;p&gt;因此，当基于分支把 Astro 构建出的 &lt;code&gt;dist&lt;/code&gt; 目录部署到 GitHub Pages 时，&lt;code&gt;_astro&lt;/code&gt; 目录会被 Jekyll 忽略，不会被发布，这导致网页显示不正常，功能异常。&lt;/p&gt;
+&lt;p&gt;解决办法很简单，在部署目录 &lt;code&gt;dist&lt;/code&gt; 添加一个名为 &lt;code&gt;.nojekyll&lt;/code&gt; 的空文件，用于告诉 GitHub Pages：不要用 Jekyll 处理这个站点。&lt;/p&gt;
+&lt;p&gt;实际上，在我的项目 &lt;code&gt;public&lt;/code&gt; 目录下添加空文件 &lt;code&gt;.nojekyll&lt;/code&gt; 即可。因为 Astro 在构建站点时，会将它复制到 &lt;code&gt;dist&lt;/code&gt; 部署目录。&lt;/p&gt;
+&lt;p&gt;在项目目录下运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;touch public/.nojekyll
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;11. 提交 commit 并推送代码到远程仓库&lt;/h4&gt;
+&lt;p&gt;在项目目录下运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git rm .github/workflows/biome.yml
+git add .github/workflows/biome.yml.disabled
+git rm .github/workflows/build.yml
+git add .github/workflows/build.yml.disabled
+git commit -m &quot;chore: 临时禁用冗余的 workflow 文件&quot;
+
+git add .github/workflows/deploy.yml
+git commit -m &quot;chore: 调整工作流文件中的引用 main 为 custom，并使打包后的文件部署到另一个仓库的 main 分支上&quot;
+
+git add astro.config.mjs
+git commit -m &quot;修改部署地址&quot;
+
+git add public/.nojekyll
+git commit -m &quot;fix: 添加文件 public/.nojekyll 以正确提供 _astro 目录中的文件&quot;
+
+git push origin custom
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;12. 验证部署结果&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;打开我的 Fork 仓库页面，点击顶部导航栏的 &lt;code&gt;Actions&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;等待最新的工作流运行完成，确保没有发生错误&lt;/li&gt;
+&lt;li&gt;打开 &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt; 仓库页面，可看到已部署好的站点文件。GitHub Pages 会自动从 &lt;code&gt;main&lt;/code&gt; 分支部署站点，无需额外操作&lt;/li&gt;
+&lt;li&gt;点击顶部导航栏的 &lt;code&gt;Actions&lt;/code&gt;，等待 GitHub Pages 部署站点完成&lt;/li&gt;
+&lt;li&gt;访问 &lt;code&gt;https://&amp;lt;username&amp;gt;.github.io&lt;/code&gt;，观察页面是否正常显示&lt;/li&gt;
+&lt;li&gt;按 &lt;code&gt;F12&lt;/code&gt; 键打开&lt;code&gt;开发人员工具&lt;/code&gt;，切换到&lt;code&gt;控制台&lt;/code&gt;面板，检查其中是否有严重错误报告信息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;后续&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;当上游更新代码后，可在我的 Fork 仓库页面点击 &lt;code&gt;Sync fork&lt;/code&gt; 按钮同步更新&lt;/li&gt;
+&lt;li&gt;建议在 &lt;code&gt;custom&lt;/code&gt; 分支上进行个性化定制（如撰写博客文章）&lt;/li&gt;
+&lt;li&gt;当本地仓库需要同步上游更新时，有以下方式：
+&lt;ul&gt;
+&lt;li&gt;完整同步：在 &lt;code&gt;master&lt;/code&gt; 分支上拉取上游最新更改，再通过 &lt;code&gt;git merge master&lt;/code&gt; 或 &lt;code&gt;git rebase master&lt;/code&gt; 将全部变更整合到 &lt;code&gt;custom&lt;/code&gt; 分支&lt;/li&gt;
+&lt;li&gt;部分同步：使用 &lt;code&gt;git cherry-pick&lt;/code&gt; 选取特定提交，或通过 &lt;code&gt;git checkout master -- &amp;lt;file&amp;gt;&lt;/code&gt; 仅更新个别文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;当想为原主题仓库贡献代码时，可先在 &lt;code&gt;master&lt;/code&gt; 主分支上拉取上游最新更改。然后，基于主分支创建新的分支，并根据工作性质合理命名，例如新功能使用 &lt;code&gt;feature/xxx&lt;/code&gt;，Bug 修复使用 &lt;code&gt;fix/xxx&lt;/code&gt;。在新分支上完成修改并提交后，将其推送到自己的 Fork 仓库。最后向原主题仓库发起 &lt;strong&gt;Pull Request&lt;/strong&gt; 请求合并分支。&lt;/li&gt;
+&lt;/ul&gt;
+</content:encoded></item></channel></rss>
