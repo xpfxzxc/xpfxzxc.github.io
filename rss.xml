@@ -1,4 +1,1168 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>未来之蓝 | xpfxzxc 的个人博客 - 个人学习和日常零散想法的记录空间，内容随性且不定期更新</title><description>未来之蓝是 xpfxzxc 的个人博客，记录个人学习和日常零散想法。心怀蔚蓝愿景，脚踏实地前行。每一篇记录都是通向理想未来的坚实脚印。</description><link>https://xpfxzxc.github.io/</link><language>zh_CN</language><item><title>基于 Firefly 主题的 Astro 博客部署（二）：文章发布</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part2/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part2/</guid><description>记录了自己在基于 Firefly 主题的 Astro 博客上，对文章文件各要素的探索与简单总结，并接触到 Front matter 和 Markdown 扩展语法。</description><pubDate>Mon, 03 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;在成功将博客站点部署到 &lt;strong&gt;GitHub Pages&lt;/strong&gt; 上后，我打算暂不修改博客的个人资料（如个人名称、头像、介绍、公告、背景图等），而是先撰写文章再发布，所以首先研究一下这部分。&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>未来之蓝 | xpfxzxc 的个人博客 - 个人学习和日常零散想法的记录空间，内容随性且不定期更新</title><description>未来之蓝是 xpfxzxc 的个人博客，记录个人学习和日常零散想法。心怀蔚蓝愿景，脚踏实地前行。每一篇记录都是通向理想未来的坚实脚印。</description><link>https://xpfxzxc.github.io/</link><language>zh_CN</language><item><title>基于 Firefly 主题的 Astro 博客部署（三）：站点配置修改</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part3/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part3/</guid><description>记录了自己在基于 Firefly 主题的 Astro 博客上修改个人名称、头像、介绍、公告、背景壁纸等配置的操作。</description><pubDate>Thu, 06 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;在成功地在 &lt;strong&gt;GitHub Pages&lt;/strong&gt; 上部署了博客，并紧接着在博客上发布文章后，看着自己撰写的文章被编排、美化成好看的页面显示在博客网站上，我的内心里瞬间有了以后在博客上撰写文章的动力。&lt;/p&gt;
+&lt;p&gt;目前，我的博客网站上包括个人名称、头像、介绍、公告、背景壁纸等在内的各种信息，仍是原 &lt;a href=&quot;https://github.com/CuteLeaf/Firefly&quot;&gt;&lt;strong&gt;Firefly&lt;/strong&gt;&lt;/a&gt; 主题作者预设的默认内容。我计划接下来逐步替换这些信息。毕竟，GitHub Pages 上的内容能够被搜索引擎收录的，作为博主，我当然不希望自己写的文章被他人阅读时，被误认为是他人所写；同时，也不希望博客中的其他信息与其他人雷同。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;src/config&lt;/code&gt; 目录下存放着博客的相关配置文件：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;src/
+├── config/
+│   ├── index.ts              # 配置索引文件
+│   ├── siteConfig.ts         # 站点基础配置
+│   ├── profileConfig.ts      # 用户资料配置
+│   ├── commentConfig.ts      # 评论系统配置
+│   ├── announcementConfig.ts # 公告配置
+│   ├── licenseConfig.ts      # 许可证配置
+│   ├── footerConfig.ts       # 页脚配置
+│   ├── FooterConfig.html     # 页脚HTML内容
+│   ├── expressiveCodeConfig.ts # 代码高亮配置
+│   ├── sakuraConfig.ts       # 樱花特效配置
+│   ├── fontConfig.ts         # 字体配置
+│   ├── sidebarConfig.ts      # 侧边栏布局配置
+│   ├── navBarConfig.ts       # 导航栏配置
+│   ├── musicConfig.ts        # 音乐播放器配置
+│   ├── pioConfig.ts          # 看板娘配置
+│   ├── adConfig.ts           # 广告配置
+│   ├── friendsConfig.ts      # 友链配置
+│   └── sponsorConfig.ts      # 赞助配置
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;元数据配置&lt;/h2&gt;
+&lt;p&gt;站点元数据配置，主要包括标题、描述、关键词和 &lt;strong&gt;Favicon&lt;/strong&gt;。这些配置信息对于 &lt;strong&gt;SEO&lt;/strong&gt; 至关重要，通常会被注入到网站的 HTML 头部（&lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; 区域），供浏览器和搜索引擎读取。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;siteConfig.ts&lt;/code&gt; 文件里存放着这些配置信息。&lt;/p&gt;
+&lt;p&gt;关于 &lt;code&gt;title&lt;/code&gt; 和 &lt;code&gt;subtitle&lt;/code&gt; 字段，最终会被如何使用，&lt;code&gt;src/layouts/Layout.astro&lt;/code&gt; 文件里有相关代码段：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;let pageTitle: string;
+if (title) {
+	pageTitle = `${title} - ${siteConfig.title}`;
+} else {
+	pageTitle = siteConfig.subtitle
+		? `${siteConfig.title} - ${siteConfig.subtitle}`
+		: siteConfig.title;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这段代码根据是否传入 &lt;code&gt;title&lt;/code&gt; 参数来决定页面标题的格式，这样可以确保：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;文章页面显示：&lt;code&gt;文章标题 - &amp;lt;title&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;首页显示：&lt;code&gt;&amp;lt;title&amp;gt; - &amp;lt;subtitle&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;其他页面根据传入的 &lt;code&gt;title&lt;/code&gt; prop 显示对应标题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;为了有利于 SEO，对于标题、描述和关键词，我将 &lt;code&gt;siteConfig.ts&lt;/code&gt; 文件内容修改为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;export const siteConfig: SiteConfig = {
+-  title: &quot;Firefly&quot;,
+-  subtitle: &quot;Demo site&quot;,
+-  description:
+-    &quot;Firefly 是一款基于 Astro 框架开发的清新美观且现代化个人博客主题，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。&quot;,
++  title: &quot;未来之蓝 | xpfxzxc 的个人博客&quot;,
++  subtitle: &quot;个人学习和日常零散想法的记录空间，内容随性且不定期更新&quot;,
++  description: &quot;未来之蓝是 xpfxzxc 的个人博客，记录个人学习和日常零散想法。心怀蔚蓝愿景，脚踏实地前行。每一篇记录都是通向理想未来的坚实脚印。&quot;,
+  keywords: [
+-    &quot;Firefly&quot;,
+-    &quot;Fuwari&quot;,
+-    &quot;Astro&quot;,
+-    &quot;ACGN&quot;,
+-    &quot;博客&quot;,
+-    &quot;技术博客&quot;,
+-    &quot;静态博客&quot;,
++    &quot;xpfxzxc&quot;, &quot;未来之蓝&quot;, &quot;个人博客&quot;,
++    &quot;个人成长&quot;, &quot;技术分享&quot;, &quot;生活随想&quot;,
++    &quot;编程学习&quot;, &quot;ACGN&quot;, &quot;动漫&quot;, &quot;二次元&quot;, &quot;游戏&quot;,
++    &quot;非专业博客&quot;, &quot;学习记录&quot;, &quot;读书笔记&quot;
+  ],
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Favicon&lt;/strong&gt; 是 favorites icon 的缩写，也被称为网页图标，它是与网站相关联的图标，通常显示在浏览器的地址栏、书签栏或标签页上。通常而言，Favicon 与网站 Logo 在设计上是相同的，仅尺寸不同。它也可能是 Logo 中的首字或首字母，或是某个标志性图案的提炼。&lt;/p&gt;
+&lt;p&gt;我打算先完成 Logo 的设计（具体步骤后述），随后使用 &lt;a href=&quot;https://imagemagick.org&quot;&gt;&lt;strong&gt;ImageMagick&lt;/strong&gt;&lt;/a&gt; 将其转换为 ICO 格式（&lt;code&gt;.ico&lt;/code&gt;），目标尺寸为 32×32 像素（假设 Logo 原始尺寸已为 1:1 比例）:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;magick logo.png -resize 32x32 favicon.ico
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;替换了 Favicon 后，维持 &lt;code&gt;siteConfig.ts&lt;/code&gt; 文件内相关配置代码段不动：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// ...
+favicon: [
+  // 留空以使用默认 favicon
+  {
+    src: &quot;/assets/images/favicon.ico&quot;, // 图标文件路径
+    theme: &quot;light&quot;, // 可选，指定主题 &apos;light&apos; | &apos;dark&apos;
+    sizes: &quot;32x32&quot;, // 可选，图标大小
+  },
+],
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果将 &lt;code&gt;favicon&lt;/code&gt; 字段设置为空数组，将使用 &lt;code&gt;public/favicon&lt;/code&gt; 目录里的图标。&lt;/p&gt;
+&lt;h2&gt;站点 Logo 和名称&lt;/h2&gt;
+&lt;p&gt;站点 Logo 和名称位于顶部导航栏的左部分。其配置不在 &lt;code&gt;navBarConfig.ts&lt;/code&gt; 文件中，而在 &lt;code&gt;siteConfig.ts&lt;/code&gt; 文件中的一部分。&lt;/p&gt;
+&lt;p&gt;Logo 与相对通用的头像或背景壁纸不同，它需要具备独特的辨识度，以避免与其他站点雷同，从而体现博客的个性。因此，若懂设计，强烈推荐亲自设计。若不懂，也有以下解决方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;AI 智能生成（抽卡）：
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.canva.com&quot;&gt;&lt;strong&gt;Canva&lt;/strong&gt;&lt;/a&gt;：全球最流行的在线设计工具&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://novelai.net&quot;&gt;&lt;strong&gt;NovelAI&lt;/strong&gt;&lt;/a&gt;：专注于二次元图像生成和故事创作&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://stabledifffusion.com&quot;&gt;&lt;strong&gt;Stable Diffusion&lt;/strong&gt;&lt;/a&gt;：免费、开源、控制力强，拥有大量各种的模型，可本地部署或使用在线平台&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.midjourney.com&quot;&gt;&lt;strong&gt;Midjourney&lt;/strong&gt;&lt;/a&gt;：收费、闭源，艺术感和质感之王&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.liblib.art&quot;&gt;&lt;strong&gt;LibibAI&lt;/strong&gt;&lt;/a&gt;：国内领先的 AI 创作平台，提供了原汁原味的 &lt;strong&gt;webUI&lt;/strong&gt;、&lt;strong&gt;comfyUI&lt;/strong&gt; 等在线 AI 绘图工具免费试用，可在线进行模型训练、使用各种模型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;打造纯文字 Logo：挑选一款特色字体，文字使用中英文组合，进行细节修饰、微调&lt;/li&gt;
+&lt;li&gt;交给专业人士：
+&lt;ul&gt;
+&lt;li&gt;淘宝/咸鱼：搜索“Logo设计”，有许多工作室接单，价格非常亲民&lt;/li&gt;
+&lt;li&gt;专业设计平台：&lt;a href=&quot;https://creativesku.com&quot;&gt;&lt;strong&gt;特赞&lt;/strong&gt;&lt;/a&gt;、&lt;a href=&quot;https://www.zcool.com.cn/&quot;&gt;&lt;strong&gt;站酷&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;社交媒体：在微博、小红书等平台上找独立设计师约稿&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Firefly 主题风格简洁美观，并且与二次元元素非常契合，这从主题演示站点的出色效果可见一斑。这让我决定采用二次元风格的头像和背景壁纸。自然地，与之配套的 Logo 和 Favicon 也应选择统一的二次元风格。&lt;/p&gt;
+&lt;p&gt;我打算先在 NovelAI 平台上输入 Prompt 来进行“抽卡”，看能不能抽出看得过去的 Logo。NovelAI 平台的新账号拥有 30 张图片的免费生成额度。&lt;/p&gt;
+&lt;p&gt;我通过 AI 来辅助生成 Prompt：首先，我将网站的标题、副标题、描述、关键词，还有之后要使用的头像和背景壁纸的相关信息输入到 AI；然后，将其生成的多个 Prompt 逐一复制到 NovelAI 里的 &lt;code&gt;Prompt&lt;/code&gt; 输入框里，并执行图片生成。在生成图片之前，可以设置其尺寸大小，例如：1:1 比例的 1024×1024 尺寸。根据生成的情况，可能要尝试好几种 Prompt，也可能需对同一个 Prompt 多次执行图片生成。最后，从生成的多张图片中挑选出几张看得过去的图片。&lt;/p&gt;
+&lt;p&gt;我最终使用的 Logo，是根据以下 Prompt 生成的：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;masterpiece, minimalist logo, an open book from which emerges a constellation of three stars flying upwards, symbolizing ideas reaching for the future. Solid color design in hue 230, white background, clean vector graphic, no gradient --niji 6 --style raw
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用该 Prompt 生成的图片通常为白底。若直接用作 Logo，视觉效果不佳，因此下一步需移除背景，将其变为透明。可以选用 &lt;a href=&quot;https://www.remove.bg&quot;&gt;&lt;strong&gt;removebg&lt;/strong&gt;&lt;/a&gt; 等在线工具或其他软件来移除背景。&lt;/p&gt;
+&lt;p&gt;目前得到的 Logo 图片格式是 PNG。作为优化流程的一环，Logo 应被转换为 WEBP 这类现代图片格式：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;magick logo.png -quality 85 logo.webp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;给博客站点取了个名称后，我将 &lt;code&gt;siteConfig.ts&lt;/code&gt; 文件内容修改为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// ...
+// 导航栏Logo
+// navbarLogo 支持三种类型：Astro图标库，本地图片，网络图片
+// { type: &quot;icon&quot;, value: &quot;material-symbols:home-pin-outline&quot; }
+// { type: &quot;image&quot;, value: &quot;/assets/images/logo.webp&quot;, alt: &quot;Firefly Logo&quot; }
+// { type: &quot;image&quot;, value: &quot;https://example.com/logo.png&quot;, alt: &quot;Firefly Logo&quot; }
+navbarLogo: {
+  type: &quot;image&quot;,
+-    value: &quot;/assets/images/LiuYingPure3.svg&quot;,
++    value: &quot;/assets/images/logo.webp&quot;,
+-    alt: &quot;🍀&quot;,
++    alt: &quot;未来之蓝博客 Logo - 一本翻开的书与飞向上方的星辰，象征知识、记录与通向未来的愿景&quot;,
+  },
+-  navbarTitle: &quot;Firefly&quot;, // 导航栏标题，可以设置为与 title 不同的值，如果不设置则使用 title
++  navbarTitle: &quot;未来之蓝&quot;, // 导航栏标题，可以设置为与 title 不同的值，如果不设置则使用 title
+}
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;个人基本资料&lt;/h2&gt;
+&lt;p&gt;个人基本资料位于页面的左侧栏。&lt;code&gt;profileConfig.ts&lt;/code&gt; 文件里存放着个人资料配置，例如修改个人头像、名称、介绍和社交栏设置。&lt;/p&gt;
+&lt;p&gt;个人头像的获取渠道很多，选取时需与网站主题风格保持一致。个人名称可直接使用自己熟悉的网名。个人介绍若无灵感，可先参考其他博主的写法。在社交栏处，可以登记下自己常用的社交媒体链接。&lt;/p&gt;
+&lt;p&gt;对于像头像这样较大或更大的图片，最好使用 &lt;strong&gt;WebP&lt;/strong&gt; 格式，WebP 的优势如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在同等视觉质量下，惊人的体积压缩&lt;/li&gt;
+&lt;li&gt;更快的页面加载速度&lt;/li&gt;
+&lt;li&gt;支持无损或有损压缩、透明度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用 ImageMagick 将 &lt;strong&gt;PNG&lt;/strong&gt; 或 &lt;strong&gt;JPG&lt;/strong&gt; 批量或单个转换为 WebP 格式很简单，例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# 有损压缩，质量 85（常用）
+magick avatar.png -quality 85 avatar.webp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;替换了头像图片之后，我将 &lt;code&gt;profileConfig.ts&lt;/code&gt; 文件内容修改为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import type { ProfileConfig } from &quot;../types/config&quot;;
+
+export const profileConfig: ProfileConfig = {
+  avatar: &quot;/assets/images/avatar.webp&quot;,
+-  name: &quot;Firefly&quot;,
+-  bio: &quot;Hello, I&apos;m Firefly.&quot;,
++  name: &quot;xpfxzxc&quot;,
++  bio: &quot;不愿沉溺于无力感，正试着将碎片化的思考转化成可见的成长足迹。&quot;,
+  links: [
+    {
+-      name: &quot;Bilibli&quot;,
+-      icon: &quot;fa6-brands:bilibili&quot;,
+-      url: &quot;https://space.bilibili.com/38932988&quot;,
++      name: &quot;Email&quot;,
++      icon: &quot;material-symbols:mail&quot;,
++      url: &quot;mailto:xpfxzxc@gmail.com&quot;,
+    },
+    {
+      name: &quot;GitHub&quot;,
+      icon: &quot;fa6-brands:github&quot;,
+-      url: &quot;https://github.com/CuteLeaf&quot;,
++      url: &quot;https://github.com/xpfxzxc&quot;,
++    },
++    {
++      name: &quot;Bilibli&quot;,
++      icon: &quot;fa6-brands:bilibili&quot;,
++      url: &quot;https://space.bilibili.com/12533717&quot;,
++    },
++    {
++      name: &quot;Steam&quot;,
++      icon: &quot;fa6-brands:steam&quot;,
++      url: &quot;https://steamcommunity.com/profiles/76561198327614842&quot;,
+    },
+  ],
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;关于 &lt;code&gt;icon&lt;/code&gt; 字段，在网络上搜索 &lt;code&gt;fa6-brands online&lt;/code&gt;，即可查询到相关的图标搜索网站：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://fontawesome.com/search&quot;&gt;FontAwesome&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://iconbuddy.com/fa6-brands&quot;&gt;Iconbuddy&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;站点公告&lt;/h2&gt;
+&lt;p&gt;公告同样位于页面的左侧栏。&lt;code&gt;announcementConfig.ts&lt;/code&gt; 文件里存放着公告配置，但卡片上的 &lt;code&gt;公告&lt;/code&gt; 字样可以自定义为其他标题，因此严格来说该区域的内容不一定是“公告”？&lt;/p&gt;
+&lt;p&gt;我将文件内容修改为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import type { AnnouncementConfig } from &quot;../types/config&quot;;
+
+export const announcementConfig: AnnouncementConfig = {
+-  title: &quot;公告&quot;, // 公告标题
+-  content: &quot;欢迎来到我的博客！这是一则示例公告。&quot;, // 公告内容
+-  closable: true, // 允许用户关闭公告
++  title: &quot;站点说明&quot;, // 公告标题
++  content: &quot;个人学习和日常零散想法的记录空间，内容随性且不定期更新。&quot;, // 公告内容
++  closable: false, // 禁止用户关闭公告
+  link: {
+-    enable: true, // 启用链接
++    enable: false, // 关闭链接
+    text: &quot;了解更多&quot;, // 链接文本
+    url: &quot;/about/&quot;, // 链接 URL
+    external: false, // 内部链接
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;导航栏&lt;/h2&gt;
+&lt;p&gt;导航栏位于页面的顶部中间部分。&lt;code&gt;navBarConfig.ts&lt;/code&gt; 文件里存放着导航栏配置，它是一个链接对象数组。每个链接对象，要么是 &lt;code&gt;LinkPreset&lt;/code&gt; 链接预设枚举，要么是自定义链接对象。当自定义链接对象时，使用 &lt;code&gt;children&lt;/code&gt; 字段可以生成多级菜单。&lt;/p&gt;
+&lt;p&gt;我将文件内容修改为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import type { NavBarConfig, NavBarLink } from &quot;../types/config&quot;;
+import { LinkPreset } from &quot;../types/config&quot;;
+import { siteConfig } from &quot;./siteConfig&quot;;
+
+// 根据页面开关动态生成导航栏配置
+const getDynamicNavBarConfig = (): NavBarConfig =&amp;gt; {
+  const links: (NavBarLink | LinkPreset)[] = [
+    LinkPreset.Home,
+    LinkPreset.Archive,
+  ];
+
+  // 支持自定义导航栏链接,并且支持多级菜单
+  links.push({
+    name: &quot;链接&quot;,
+    url: &quot;/links/&quot;,
+    icon: &quot;material-symbols:link&quot;,
+    children: [
++      {
++        name: &quot;Email&quot;,
++        url: &quot;mailto:xpfxzxc@gmail.com&quot;,
++        external: true,
++        icon: &quot;material-symbols:mail&quot;,
++      },
+      {
+        name: &quot;GitHub&quot;,
+-        url: &quot;https://github.com/CuteLeaf/Firefly&quot;,
++        url: &quot;https://github.com/xpfxzxc&quot;,
+        external: true,
+        icon: &quot;fa6-brands:github&quot;,
+      },
+      {
+        name: &quot;Bilibili&quot;,
+-        url: &quot;https://space.bilibili.com/38932988&quot;,
++        url: &quot;https://space.bilibili.com/12533717&quot;,
+        external: true,
+        icon: &quot;fa6-brands:bilibili&quot;,
+      },
++      {
++        name: &quot;Steam&quot;,
++        url: &quot;https://steamcommunity.com/profiles/76561198327614842&quot;,
++        external: true,
++        icon: &quot;fa6-brands:steam&quot;,
++      },
+    ],
+  });
+
+  links.push(LinkPreset.Friends);
+
+  // 根据配置决定是否添加留言板页面
+  if (siteConfig.pages.guestbook) {
+    links.push(LinkPreset.Guestbook);
+  }
+
+  links.push({
+    name: &quot;关于&quot;,
+    url: &quot;/content/&quot;,
+    icon: &quot;material-symbols:info&quot;,
+    children: [
+      ...(siteConfig.pages.anime ? [LinkPreset.Anime] : []), // 根据配置决定是否添加追番页面
+      ...(siteConfig.pages.sponsor ? [LinkPreset.Sponsor] : []), // 根据配置决定是否添加赞助页面
+      LinkPreset.About,
+    ],
+  });
+  return { links };
+};
+
+export const navBarConfig: NavBarConfig = getDynamicNavBarConfig();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;关于 &lt;code&gt;icon&lt;/code&gt; 字段里用到的 &lt;strong&gt;Material Symbols&lt;/strong&gt;，更多图标可在 &lt;a href=&quot;https://fonts.google.com/icons&quot;&gt;Material Symbols and Icons&lt;/a&gt; 网站中搜索。&lt;/p&gt;
+&lt;h2&gt;背景壁纸&lt;/h2&gt;
+&lt;p&gt;虽然 &lt;a href=&quot;https://unsplash.com&quot;&gt;&lt;strong&gt;Unsplash&lt;/strong&gt;&lt;/a&gt;、&lt;a href=&quot;https://www.pexels.com&quot;&gt;&lt;strong&gt;Pexels&lt;/strong&gt;&lt;/a&gt;、&lt;a href=&quot;https://pixabay.com&quot;&gt;&lt;strong&gt;Pixabay&lt;/strong&gt;&lt;/a&gt; 等网站提供海量高质量图片，但是我不喜欢这些网站上的图片风格，比如：自然、生活、简约、插画、抽象、纹理、摄影、渐变、写实等。我认为这些图片倒是比较适合作为商业册子上的图案或者电子设备上的背景壁纸。其中，大部分图片看着令我感到压抑感；小部分图片单独看着还可以，但作为网页背景壁纸时不太适配 Firefly 主题现有元素风格。与其用这些背景壁纸，不如采用极简风格的色彩搭配或直接使用纯色背景。&lt;/p&gt;
+&lt;p&gt;既然我之前选用的头像是二次元风格，而且 Firefly 主题演示站点用的背景壁纸看起来美观，令人感到舒适，那就使用 &lt;a href=&quot;https://www.pixiv.co.jp&quot;&gt;&lt;strong&gt;Pixiv&lt;/strong&gt;&lt;/a&gt; 或 &lt;a href=&quot;https://www.zerochan.net&quot;&gt;&lt;strong&gt;zerochan&lt;/strong&gt;&lt;/a&gt; 等网站上高质量插画来作为博客的背景壁纸。在选择的过程中，要注意避免版权问题，最好选择作者明确标明“可自由使用” 或 &lt;strong&gt;CC0&lt;/strong&gt;、&lt;strong&gt;CC BY&lt;/strong&gt; 授权的插画。&lt;/p&gt;
+&lt;p&gt;此外，在网友自建的壁纸站里找高质量壁纸也是一种很好的选择。比如：&lt;a href=&quot;https://www.lovewind.de&quot;&gt;&lt;strong&gt;恋风画廊 - 高质量壁纸下载&lt;/strong&gt;&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;针对不同设备的屏幕比例特性，一般来说：移动端优先采用竖屏背景壁纸，而非移动端（如 PC、平板）则统一采用横屏背景壁纸。&lt;/p&gt;
+&lt;p&gt;为了优化浏览体验，建议将选定的背景壁纸转换为 WEBP 格式。可以替换掉 &lt;code&gt;public/assets/images&lt;/code&gt; 目录下的 &lt;code&gt;d1.webp&lt;/code&gt;（桌面端）和 &lt;code&gt;m1.webp&lt;/code&gt;（移动端）文件，也可另取文件名保存。注意，将背景壁纸本地化保存可有效避免因外部链接失效导致的显示问题。&lt;/p&gt;
+&lt;p&gt;背景壁纸相关的配置在 &lt;code&gt;siteConfig.ts&lt;/code&gt; 文件里 &lt;code&gt;backgroundWallpaper&lt;/code&gt; 字段上，里面有非常多的选项可以配置。几乎所有的选项都已有注释，非常好理解，不过，&lt;code&gt;position&lt;/code&gt; 选项的理解需要额外学习一些 &lt;strong&gt;CSS&lt;/strong&gt; 知识点。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// ...
+// 图片位置
+// 支持所有CSS object-position值，如: &apos;top&apos;, &apos;center&apos;, &apos;bottom&apos;, &apos;left top&apos;, &apos;right bottom&apos;, &apos;25% 75%&apos;, &apos;10px 20px&apos;..
+// 如果不知道怎么配置百分百之类的配置，推荐直接使用：&apos;center&apos;居中，&apos;top&apos;顶部居中，&apos;bottom&apos; 底部居中，&apos;left&apos;左侧居中，&apos;right&apos;右侧居中
+position: &quot;0% 20%&quot;,
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;根据代码注释和源码，这里 &lt;code&gt;position&lt;/code&gt; 选项的值会直接运用到 CSS 的 &lt;code&gt;object-position&lt;/code&gt; 属性上。&lt;code&gt;object-position&lt;/code&gt; 属性的作用：想象成照片（可替换元素）在相框（内容框）里移动，具体来说，照片上的哪个点与相框上的哪个点对齐。&lt;/p&gt;
+&lt;p&gt;CSS &lt;code&gt;object-fit&lt;/code&gt; 通常配合 &lt;code&gt;object-position&lt;/code&gt; 属性使用，它的值：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;cover&lt;/code&gt;：照片按其宽高比进行缩放，直至完全覆盖相框，可能会裁剪一部分&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;contain&lt;/code&gt;：照片按其宽高比进行缩放，直到完整显示在相框内，可能会留有空白&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fill&lt;/code&gt;（默认）：照片会被拉伸或压缩，以填满整个相框，可能会变形&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在源码中，已经将 &lt;code&gt;object-fit&lt;/code&gt; 属性的值设置成 &lt;code&gt;cover&lt;/code&gt; 了。&lt;/p&gt;
+&lt;p&gt;综上来看，配置文件中的 &lt;code&gt;position: 0 20%&lt;/code&gt; 的含义是：保持相框不动，让图片在垂直方向上向上移动，从而在容器中展示出图片更靠下的区域，就等于告诉浏览器：“不想看这张大图最顶上的一部分，请把画面往下挪一点再给我看。”这表明如果使用这个值的话，使用的背景壁纸顶部将被裁剪掉的一小部分不要有“太重要”的内容。&lt;/p&gt;
+&lt;p&gt;在“横幅壁纸”模式下，主页横幅区域设有标题与副标题文字，其中副标题会从预设的若干组文字中动态轮换，并呈现逐字键入与删除的动态效果。文字内容需要兼顾节奏与韵律、意境与画面、情感共鸣、系列感与统一。&lt;/p&gt;
+&lt;p&gt;在该模式下，当前可能存在两个显示协调性问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在主页面中，横幅的主标题和副标题可能会遮挡背景壁纸的关键部分（如角色脸部），影像画面整体协调，此时可能需要调整配置文件中的 &lt;code&gt;position&lt;/code&gt; 字段。&lt;/li&gt;
+&lt;li&gt;其他页面的背景壁纸位置相较于主页会略微上移，下方卡片区域也向上移动，导致背景壁纸被遮挡的区域更大，画面看起来不协调。因此，同样可能需要通过调整 &lt;code&gt;position&lt;/code&gt; 字段进行修正。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;不过，即使调整好了 &lt;code&gt;position&lt;/code&gt; 字段，在其他视口尺寸的情况下，同样可能出现遮挡问题。要彻底规避遮挡问题，要么投入更多开发量引入响应式定位机制，要么改用“全屏壁纸”或“纯色背景”模式，甚至直接更换背景壁纸。&lt;/p&gt;
+&lt;p&gt;最终，我将背景壁纸相关配置改为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  backgroundWallpaper: {
+    // 壁纸模式：&quot;banner&quot; 横幅壁纸，&quot;overlay&quot; 全屏壁纸，&quot;none&quot; 纯色背景无壁纸
+    mode: &quot;banner&quot;,
+    // 是否允许用户通过导航栏切换壁纸模式，设为false可提升性能（只渲染当前模式）
+    switchable: true,
+
+    // 背景图片配置
+    src: {
+      // 桌面背景图片
+      desktop: &quot;/assets/images/d1.webp&quot;,
+      // 移动背景图片
+      mobile: &quot;/assets/images/m1.webp&quot;,
+    },
+
+    // Banner模式特有配置
+    banner: {
+      // 图片位置
+      // 支持所有CSS object-position值，如: &apos;top&apos;, &apos;center&apos;, &apos;bottom&apos;, &apos;left top&apos;, &apos;right bottom&apos;, &apos;25% 75%&apos;, &apos;10px 20px&apos;..
+      // 如果不知道怎么配置百分百之类的配置，推荐直接使用：&apos;center&apos;居中，&apos;top&apos;顶部居中，&apos;bottom&apos; 底部居中，&apos;left&apos;左侧居中，&apos;right&apos;右侧居中
+-     position: &quot;0% 20%&quot;,
++     position: &quot;center 9%&quot;,
+      
+      homeText: {
+        // 主页显示自定义文本（全局开关）
+        enable: true,
+        // 主页横幅主标题
+-       title: &quot;Lovely firefly!&quot;,
++       title: &quot;Future Archives!&quot;,
+        // 主页横幅副标题
+        subtitle: [
+-         &quot;In Reddened Chrysalis, I Once Rest&quot;,
+-         &quot;From Shattered Sky, I Free Fall&quot;,
+-         &quot;Amidst Silenced Stars, I Deep Sleep&quot;,
+-         &quot;Upon Lighted Fyrefly, I Soon Gaze&quot;,
+-         &quot;From Undreamt Night, I Thence Shine&quot;,
+-         &quot;In Finalized Morrow, I Full Bloom&quot;,
++         &quot;In Reddened Chrysalis, I Once Rest&quot;,
++         &quot;From Shattered Sky, I Free Fall&quot;,
++         &quot;Amidst Silenced Stars, I Deep Sleep&quot;,
++         &quot;Upon Lighted Fyrefly, I Soon Gaze&quot;,
++         &quot;From Undreamt Night, I Thence Shine&quot;,
++         &quot;In Finalized Morrow, I Full Bloom&quot;,
+        ],
+        typewriter: {
+          enable: true, // 启用副标题打字机效果
+          speed: 100, // 打字速度（毫秒）
+          deleteSpeed: 50, // 删除速度（毫秒）
+          pauseTime: 2000, // 完全显示后的暂停时间（毫秒）
+        },
+      },
+      credit: {
+        enable: {
+          desktop: true, // 桌面端显示横幅图片来源文本
+-         mobile: false, // 移动端显示横幅图片来源文本
++         mobile: true, // 移动端显示横幅图片来源文本
+        },
+        text: {
+-         desktop: &quot;Pixiv - 晚晚喵&quot;, // 桌面端要显示的来源文本
+-         mobile: &quot;Mobile Credit&quot;, // 移动端要显示的来源文本
++         desktop: &quot;Pixiv - 鈴木シロリ&quot;, // 桌面端要显示的来源文本
++         mobile: &quot;Pixiv - Orivayne&quot;, // 移动端要显示的来源文本
+        },
+        url: {
+-         desktop: &quot;https://www.pixiv.net/artworks/135490046&quot;, // 桌面端原始艺术品或艺术家页面的 URL 链接
+-         mobile: &quot;&quot;, // 移动端原始艺术品或艺术家页面的 URL 链接
++         desktop: &quot;https://www.pixiv.net/artworks/108043909&quot;, // 桌面端原始艺术品或艺术家页面的 URL 链接
++         mobile: &quot;https://www.pixiv.net/artworks/130379063&quot;, // 移动端原始艺术品或艺术家页面的 URL 链接
+        },
+      },
+      navbar: {
+        transparentMode: &quot;semifull&quot;, // 导航栏透明模式：&quot;semi&quot; 半透明加圆角，&quot;full&quot; 完全透明，&quot;semifull&quot; 动态透明
+      },
+      // 波浪动画效果配置，开启可能会影响页面性能，请根据实际情况开启
+      waves: {
+        enable: {
+          desktop: true, // 桌面端启用波浪动画效果
+          mobile: true, // 移动端启用波浪动画效果
+        },
+        performance: {
+          quality: &quot;high&quot;,
+          hardwareAcceleration: true, // 是否启用硬件加速
+        },
+        // 性能优化说明：
+        // quality: &quot;high&quot; - 最佳视觉效果，但GPU占用较高，适合高性能设备
+        // quality: &quot;medium&quot; - 平衡性能和质量，适合中等性能设备
+        // quality: &quot;low&quot; - 最低GPU占用，动画更简单，适合低性能设备
+        // hardwareAcceleration: true - 启用GPU加速，提升性能但增加GPU占用
+        // hardwareAcceleration: false - 禁用GPU加速，降低GPU占用但可能影响性能
+      },
+    },
+
+    // 全屏透明覆盖模式特有配置
+    overlay: {
+      zIndex: -1, // 层级，确保壁纸在背景层
+      opacity: 0.8, // 壁纸透明度
+-     blur: 1, // 背景模糊程度
++     blur: 0.5, // 背景模糊程度
+    },
+  },
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;主题色&lt;/h2&gt;
+&lt;p&gt;更换好 Logo、Favicon、头像图片和背景壁纸后，下一步是选择合适的主题色，以确保网站各元素的色彩整体和谐统一。&lt;/p&gt;
+&lt;p&gt;当前的主题色系统基于 &lt;strong&gt;OKLCH&lt;/strong&gt; 色彩空间构建。无论是通过配置文件还是界面调节器修改主题色，最终都会作用于 CSS 变量 &lt;code&gt;--hue&lt;/code&gt;。系统中主题相关的颜色，都是基于固定的&lt;strong&gt;亮度&lt;/strong&gt;（&lt;strong&gt;Lightness&lt;/strong&gt;）与&lt;strong&gt;色度&lt;/strong&gt;（&lt;strong&gt;Chroma&lt;/strong&gt;）值，结合可变的&lt;strong&gt;色相&lt;/strong&gt;（&lt;strong&gt;Hue&lt;/strong&gt;）值动态计算得出的。例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;/* ===== 主题相关变量 ===== */
+:root {
+  --primary: oklch(0.70 0.14 var(--hue));
+  --page-bg: oklch(0.95 0.01 var(--hue));
+  --card-bg: white;
+  --card-bg-transparent: rgba(255, 255, 255, 0.8);
+  
+  --btn-content: oklch(0.55 0.12 var(--hue));
+  --btn-regular-bg: oklch(0.95 0.025 var(--hue));
+  --btn-regular-bg-hover: oklch(0.9 0.05 var(--hue));
+  --btn-regular-bg-active: oklch(0.85 0.08 var(--hue));
+  /* ... */
+}
+/* ... */
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因此，主题色可选的范围非常有限。&lt;/p&gt;
+&lt;p&gt;我将 &lt;code&gt;siteConfig.ts&lt;/code&gt; 文件里的主题色配置为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;themeColor: {
+-  hue: 165, // 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
+-  fixed: false, // 对访问者隐藏主题色选择器
++  hue: 230, // 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
++  fixed: true, // 对访问者隐藏主题色选择器
+  defaultMode: &quot;system&quot;, // 默认模式：&quot;light&quot; 亮色，&quot;dark&quot; 暗色，&quot;system&quot; 跟随系统
+},
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;字体&lt;/h2&gt;
+&lt;p&gt;基于目前的默认字体配置，虽说字体在我的电脑上显示得很美观，但是在其他电脑上就可能显示得不一样。对此，我有个需求：不管在什么设备上打开博客站点，页面上都要使用同样的字体。&lt;/p&gt;
+&lt;p&gt;由于我不太了解字体方面，所以在配置前查阅了相关资料，并阅读了一些源码。&lt;/p&gt;
+&lt;p&gt;字体的相关配置在 &lt;code&gt;fontConfig.ts&lt;/code&gt; 文件里：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// 字体配置
+export const fontConfig = {
+  enable: true, // 启用自定义字体功能
+  preload: true, // 预加载字体文件以提高性能
+  selected: [&quot;system&quot;], // 当前选择的字体，支持多个字体组合
+  fonts: {
+    // 系统字体
+    system: {
+      id: &quot;system&quot;,
+      name: &quot;系统字体&quot;,
+      src: &quot;&quot;, // 系统字体无需 src
+      family:
+        &quot;system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif&quot;,
+    },
+    // Google Fonts - Zen Maru Gothic
+    &quot;zen-maru-gothic&quot;: {
+      id: &quot;zen-maru-gothic&quot;,
+      name: &quot;Zen Maru Gothic&quot;,
+      src: &quot;https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700;900&amp;amp;display=swap&quot;,
+      family: &quot;Zen Maru Gothic&quot;,
+      display: &quot;swap&quot; as const,
+    },
+    // Google Fonts - Inter
+    inter: {
+      id: &quot;inter&quot;,
+      name: &quot;Inter&quot;,
+      src: &quot;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;amp;display=swap&quot;,
+      family: &quot;Inter&quot;,
+      display: &quot;swap&quot; as const,
+    },
+    // 小米字体 - MiSans Normal
+    &quot;misans-normal&quot;: {
+      id: &quot;misans-normal&quot;,
+      name: &quot;MiSans Normal&quot;,
+      src: &quot;https://unpkg.com/misans@4.1.0/lib/Normal/MiSans-Normal.min.css&quot;,
+      family: &quot;MiSans&quot;,
+      weight: 400,
+      display: &quot;swap&quot; as const,
+    },
+    // 小米字体 - MiSans Semibold
+    &quot;misans-semibold&quot;: {
+      id: &quot;misans-semibold&quot;,
+      name: &quot;MiSans Semibold&quot;,
+      src: &quot;https://unpkg.com/misans@4.1.0/lib/Normal/MiSans-Semibold.min.css&quot;,
+      family: &quot;MiSans&quot;,
+      weight: 600,
+      display: &quot;swap&quot; as const,
+    },
+  },
+  fallback: [
+    &quot;system-ui&quot;,
+    &quot;-apple-system&quot;,
+    &quot;BlinkMacSystemFont&quot;,
+    &quot;Segoe UI&quot;,
+    &quot;Roboto&quot;,
+    &quot;sans-serif&quot;,
+  ], // 全局字体回退
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;从配置中可知，有两个结构需要去研究一下。&lt;/p&gt;
+&lt;p&gt;字体选择配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// 字体配置
+export type FontConfig = {
+  enable: boolean; // 是否启用自定义字体功能
+  selected: string | string[]; // 当前选择的字体ID，支持单个或多个字体组合
+  fonts: Record&amp;lt;string, FontItem&amp;gt;; // 字体库，以ID为键的对象
+  fallback?: string[]; // 全局字体回退列表
+  preload?: boolean; // 是否预加载字体文件以提高性能
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;单个字体项配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// 单个字体配置
+export type FontItem = {
+  id: string; // 字体唯一标识符
+  name: string; // 字体显示名称
+  src: string; // 字体文件路径或URL链接
+  family: string; // CSS font-family 名称
+  weight?: string | number; // 字体粗细，如 &quot;normal&quot;, &quot;bold&quot;, 400, 700 等
+  style?: &quot;normal&quot; | &quot;italic&quot; | &quot;oblique&quot;; // 字体样式
+  display?: &quot;auto&quot; | &quot;block&quot; | &quot;swap&quot; | &quot;fallback&quot; | &quot;optional&quot;; // font-display 属性
+  unicodeRange?: string; // Unicode 范围，用于字体子集化
+  format?:
+    | &quot;woff&quot;
+    | &quot;woff2&quot;
+    | &quot;truetype&quot;
+    | &quot;opentype&quot;
+    | &quot;embedded-opentype&quot;
+    | &quot;svg&quot;; // 字体格式，仅当 src 为本地文件时需要
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其对应的处理代码片段都在 &lt;code&gt;src/components/interactive/FootManager.astro&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;p&gt;CSS &lt;code&gt;font-family&lt;/code&gt; 属性的值是一个按照优先级顺序的字体名称列表，被称为&lt;strong&gt;字体栈&lt;/strong&gt;或&lt;strong&gt;字体族堆栈&lt;/strong&gt;。浏览器会从列表的最左边开始尝试，如果用户设备上没有安装该字体或者无法下载该字体，浏览器就会尝试列表中的下一个字体，以此类推。最后通常会以一个通用字体族作为后备，确保内容在任何情况下都基本可读。&lt;/p&gt;
+&lt;p&gt;通用字体族是非常重要的后背方案（对应的名称不加引号）：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;通用字体族&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;th&gt;典型示例&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;serif&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;衬线体，字符笔画末端有装饰性的小细节。显得传统、正式、优雅&lt;/td&gt;
+&lt;td&gt;Times New Roman, 宋体, SimSun&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;sans-serif&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;无衬线体，字符笔画末端干净，没有装饰。显得现代、简洁、易读&lt;/td&gt;
+&lt;td&gt;Arial, Helvetica, 微软雅黑, Microsoft YaHei&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;monospace&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;等宽字体，所有字符宽度相同。常用于显示代码、终端文本&lt;/td&gt;
+&lt;td&gt;Courier New, Consolas, Monaco&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;cursive&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;草书字体，模拟手写笔迹。具有艺术性，但可读性较差&lt;/td&gt;
+&lt;td&gt;Comic Sans MS, 楷体 (有时)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;fantasy&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;奇幻字体，具有特殊艺术效果的字体。主要用于装饰&lt;/td&gt;
+&lt;td&gt;Impact, Papyrus&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;system-ui&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;系统默认字体，直接使用用户操作系统的默认界面字体&lt;/td&gt;
+&lt;td&gt;San Francisco (macOS), Segoe UI (Windows)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;至于 &lt;code&gt;fallback&lt;/code&gt; 字段里的其他值：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-apple-system&lt;/code&gt;：专为 &lt;strong&gt;macOS&lt;/strong&gt; 和 &lt;strong&gt;iOS&lt;/strong&gt; 系统设计的字体家族名称，用于调用苹果系统的默认字体（San Francisco）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;BlinkMacSystemFont&lt;/code&gt;：针对 macOS 上使用 &lt;strong&gt;Blink&lt;/strong&gt; 渲染引擎的浏览器（如 &lt;strong&gt;Chrome&lt;/strong&gt;、&lt;strong&gt;Edge&lt;/strong&gt;、&lt;strong&gt;Opera&lt;/strong&gt;）的字体名称&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Segoe UI&lt;/code&gt;：&lt;strong&gt;Misrosoft Windows&lt;/strong&gt; 从 &lt;strong&gt;Vista&lt;/strong&gt; 开始使用的默认界面字体&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Roboto&lt;/code&gt;：&lt;strong&gt;Google&lt;/strong&gt; 开发的 &lt;strong&gt;Android&lt;/strong&gt; 系统和 &lt;strong&gt;Chrome OS&lt;/strong&gt; 的默认字体&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由此可见，&lt;code&gt;fallback&lt;/code&gt; 字段值的基本核心思想是选择对应平台上的默认系统字体。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;selected&lt;/code&gt; 字段主要作用是生成 CSS &lt;code&gt;font-family&lt;/code&gt; 属性的堆叠，期间它会过滤掉传入的 id，其对应的单个字体项中 &lt;code&gt;src&lt;/code&gt; 字段为空的：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// 获取选中的字体
+const getSelectedFonts = () =&amp;gt; {
+  if (!fontConfig.enable || !fontConfig.selected) return [];
+
+  const selectedIds = Array.isArray(fontConfig.selected)
+    ? fontConfig.selected
+    : [fontConfig.selected];
+
+  return selectedIds
+    .map((id) =&amp;gt; fontConfig.fonts[id])
+    .filter((font) =&amp;gt; font &amp;amp;&amp;amp; font.src); // 过滤掉系统字体和不存在的字体
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;也就是说，目前填的 &lt;code&gt;selected: [&quot;system&quot;]&lt;/code&gt;，相当于 &lt;code&gt;selected: []&lt;/code&gt;，直接使用 &lt;code&gt;fallback&lt;/code&gt; 字段生成 &lt;code&gt;font-family&lt;/code&gt; 属性的值：&lt;code&gt;system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;对于成功被选择的每一个单个字体项，根据传入的 &lt;code&gt;src&lt;/code&gt; 字段的链接类型会生成不同类型的新标签：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- 字体样式表链接 --&amp;gt;{
+  selectedFonts.map((font) =&amp;gt; {
+    // 判断是否为外部链接
+    const isExternalUrl =
+      font.src.startsWith(&quot;http://&quot;) ||
+      font.src.startsWith(&quot;https://&quot;) ||
+      font.src.startsWith(&quot;//&quot;);
+
+    if (isExternalUrl) {
+      // 外部字体链接 (如 Google Fonts, CDN等)
+      return &amp;lt;link rel=&quot;stylesheet&quot; href={font.src} /&amp;gt;;
+    } else {
+      // 本地字体文件
+      return (
+        &amp;lt;style
+          set:html={`
+        @font-face {
+          font-family: &quot;${font.family}&quot;;
+          src: url(&quot;${font.src}&quot;) ${font.format ? `format(&quot;${font.format}&quot;)` : &quot;&quot;};
+          ${font.weight ? `font-weight: ${font.weight};` : &quot;&quot;}
+          ${font.style ? `font-style: ${font.style};` : &quot;&quot;}
+          ${font.display ? `font-display: ${font.display};` : &quot;&quot;}
+          ${font.unicodeRange ? `unicode-range: ${font.unicodeRange};` : &quot;&quot;}
+        }
+      `}
+        /&amp;gt;
+      );
+    }
+  })
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;单个字体项的各字段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;id&lt;/code&gt;：不影响渲染。用于内部查找、CSS 类名生成&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;：不影响渲染。用于文档说明、可读性&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;family&lt;/code&gt;：影响渲染。用于 CSS &lt;code&gt;font-family&lt;/code&gt; 属性&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;weight&lt;/code&gt;：仅影响渲染本地字体，由 &lt;code&gt;@font-face&lt;/code&gt; 规则定义&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;display&lt;/code&gt;：仅影响渲染本地字体，定义本地字体的加载行为，用于 CSS &lt;code&gt;font-display&lt;/code&gt; 属性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;从结果上看，不管是使用外部字体链接还是本地字体文件，最终都会引入 &lt;code&gt;@font-face&lt;/code&gt; 规则。因为外部字体链接通常是一堆 &lt;code&gt;@font-face&lt;/code&gt; 规则的 CSS 文件的链接。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;@font-face&lt;/code&gt; 规则允许使用自定义字体，需要在 CSS 文件的顶层定义或者放在 &lt;code&gt;&amp;lt;style&amp;gt;&lt;/code&gt; 标签内，声明一个字体家族供后续使用。例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@font-face {
+  font-family: &apos;Zen Maru Gothic&apos;;
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/zenmarugothic/v19/o-0XIpIxzW5b-RxT-6A8jWAtCp-cQWpCOfKK_7mX3yPCWUgO7n9RJZk8vDuG3WM.2.woff2) format(&apos;woff2&apos;);
+  unicode-range: U+ffd7, U+ffda-ffdc, U+ffe0-ffe2, U+ffe4, U+ffe6, U+ffe8-ffee, U+1f100-1f10c, U+1f110-1f16c, U+1f170-1f1ac, U+1f200-1f202, U+1f210-1f234;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;关键属性解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;font-family&lt;/code&gt;：自定义字体的别名。将在后面的 CSS 规则中用这个名字来引用它&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;src&lt;/code&gt;：字体文件的实际路径。可以通过 &lt;code&gt;url()&lt;/code&gt; 指定一个或多个源，浏览器会按顺序加载第一个它能识别的格式。&lt;code&gt;format()&lt;/code&gt; 用于帮助浏览器识别字体格式&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;font-weight&lt;/code&gt;：告诉浏览器这个特定的字体文件对应哪种字重&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;font-style&lt;/code&gt;：告诉浏览器这个特定的字体文件是正常样式还是斜体&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;unicode-range&lt;/code&gt;：指定一个作用范围 —— 只有当网页中的字符落在指定的 Unicode 编码范围内时，才会下载并使用这个特定的字体文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!WARNING]
+如果只提供了一个字体文件（比如常规粗细 &lt;code&gt;400&lt;/code&gt;），但在 CSS 中使用了 &lt;code&gt;font-weight: 700&lt;/code&gt;，浏览器会尝试通过算法加粗这个字体。这种模拟效果很粗糙，远不如真正的粗体字文件美观。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;CSS &lt;code&gt;font-display&lt;/code&gt; 是另一个关键属性，专门用于控制网页字体的加载和显示方式。&lt;/p&gt;
+&lt;p&gt;当使用 &lt;code&gt;@font-face&lt;/code&gt; 引入一个网络字体时，浏览器可能的默认行为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;FOIT&lt;/strong&gt;（闪烁的不可见文本）：在自定义字体加载完成之前，浏览器会将文字隐藏，显示一片空白&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;FOUT&lt;/strong&gt;（闪烁的无样式文本）：浏览器先使用备用字体显示文本，等自定义字体加载完成后再切换回来&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;font-display&lt;/code&gt; 提供了一些值让我们去覆盖这种浏览器的默认行为。不过，为了理解这些值的含义，要先了解理解浏览器处理字体加载的三个关键时间段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;阻塞期&lt;/strong&gt;：字体在加载时，浏览器会阻塞文本的显示，必须渲染不可见的备用字体。如果字体缓存中有，这个时期极其短&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;交换期&lt;/strong&gt;：如果阻塞期结束字体还没加载好，浏览器会使用备用字体。之后一旦自定义字体加载完成，就好立即交换过来&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;失效期&lt;/strong&gt;：如果交换期都结束了，字体还没加载好，浏览器就会放弃使用这个自定义字体，页面将一直使用备用字体&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;font-display&lt;/code&gt; 的不同值，能够调整这三个时间段的长度和行为：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;值&lt;/th&gt;
+&lt;th&gt;行为描述&lt;/th&gt;
+&lt;th&gt;阻塞期&lt;/th&gt;
+&lt;th&gt;交换期&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;auto&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;浏览器默认行为。通常是 FOIT（隐藏文本直到超时）&lt;/td&gt;
+&lt;td&gt;不确定&lt;/td&gt;
+&lt;td&gt;不确定&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;block&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文字会暂时不可见，然后立即使用备用字体显示，最后再交换回自定义字体&lt;/td&gt;
+&lt;td&gt;极短&lt;/td&gt;
+&lt;td&gt;无限&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;swap&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;立即用备用字体显示，等自定义字体加载好后立即交换&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;无限&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;fallback&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文字会极短暂不可见，然后使用备用字体。如果之后自定义字体在较短的交换期内加载好了，就交换；否则就永远使用备用字体&lt;/td&gt;
+&lt;td&gt;极短&lt;/td&gt;
+&lt;td&gt;短&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;optional&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;文字会极短暂不可见，然后使用备用字体。是否交换取决于用户的网络连接和速度。如果用户在第一次访问时网络慢，字体可能永远不会加载&lt;/td&gt;
+&lt;td&gt;极短&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;由此可见，&lt;code&gt;swap&lt;/code&gt; 是最常用、最推荐的选项，适用于我们这种正文等需要快速展示内容的情况。&lt;/p&gt;
+&lt;p&gt;在了解了字体配置和显示的机制后，就可以修改字体的相关配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// 字体配置
+export const fontConfig = {
+  enable: true, // 启用自定义字体功能
+  preload: true, // 预加载字体文件以提高性能
+-  selected: [&quot;system&quot;], // 当前选择的字体，支持多个字体组合
++  selected: [&quot;misans-light&quot;, &quot;misans-normal&quot;, &quot;misans-medium&quot;,  &quot;misans-semibold&quot;, &quot;misans-bold&quot;], // 当前选择的字体，支持多个字体组合
+  fonts: {
+-    // 系统字体
+-    system: {
+-      id: &quot;system&quot;,
+-      name: &quot;系统字体&quot;,
+-      src: &quot;&quot;, // 系统字体无需 src
+-      family:
+-        &quot;system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif&quot;,
+-    },
+-    // Google Fonts - Zen Maru Gothic
+-    &quot;zen-maru-gothic&quot;: {
+-      id: &quot;zen-maru-gothic&quot;,
+-      name: &quot;Zen Maru Gothic&quot;,
+-      src: &quot;https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700;900&amp;amp;display=swap&quot;,
+-      family: &quot;Zen Maru Gothic&quot;,
+-      display: &quot;swap&quot; as const,
+-    },
+-    // Google Fonts - Inter
+-    inter: {
+-      id: &quot;inter&quot;,
+-      name: &quot;Inter&quot;,
+-      src: &quot;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;amp;display=swap&quot;,
+-      family: &quot;Inter&quot;,
+-      display: &quot;swap&quot; as const,
+-    },
++    // 小米字体 - MiSans Light
++    &quot;misans-light&quot;: {
++      id: &quot;misans-light&quot;,
++      name: &quot;MiSans Light&quot;,
++      src: &quot;https://unpkg.com/misans@4.1.0/lib/Normal/MiSans-Light.min.css&quot;,
++      family: &quot;MiSans&quot;,
++      weight: 300,
++      display: &quot;swap&quot; as const,
++    },
+    // 小米字体 - MiSans Normal
+    &quot;misans-normal&quot;: {
+      id: &quot;misans-normal&quot;,
+      name: &quot;MiSans Normal&quot;,
+      src: &quot;https://unpkg.com/misans@4.1.0/lib/Normal/MiSans-Normal.min.css&quot;,
+      family: &quot;MiSans&quot;,
+      weight: 400,
+      display: &quot;swap&quot; as const,
+    },
++    // 小米字体 - MiSans Medium
++    &quot;misans-medium&quot;: {
++      id: &quot;misans-medium&quot;,
++      name: &quot;MiSans Medium&quot;,
++      src: &quot;https://unpkg.com/misans@4.1.0/lib/Normal/MiSans-Medium.min.css&quot;,
++      family: &quot;MiSans&quot;,
++      weight: 500,
++      display: &quot;swap&quot; as const,
++    },
+    // 小米字体 - MiSans Semibold
+    &quot;misans-semibold&quot;: {
+      id: &quot;misans-semibold&quot;,
+      name: &quot;MiSans Semibold&quot;,
+      src: &quot;https://unpkg.com/misans@4.1.0/lib/Normal/MiSans-Semibold.min.css&quot;,
+      family: &quot;MiSans&quot;,
+      weight: 600,
+      display: &quot;swap&quot; as const,
+    },
++    // 小米字体 - MiSans Bold
++    &quot;misans-bold&quot;: {
++      id: &quot;misans-bold&quot;,
++      name: &quot;MiSans Bold&quot;,
++      src: &quot;https://unpkg.com/misans@4.1.0/lib/Normal/MiSans-Bold.min.css&quot;,
++      family: &quot;MiSans&quot;,
++      weight: 700,
++      display: &quot;swap&quot; as const,
++    },
+  }
+  fallback: [
+    &quot;system-ui&quot;,
+    &quot;-apple-system&quot;,
+    &quot;BlinkMacSystemFont&quot;,
+    &quot;Segoe UI&quot;,
+    &quot;Roboto&quot;,
+    &quot;sans-serif&quot;,
+  ], // 全局字体回退
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样就确保所选用的自定义字体涵盖了中文、英文、数字及日文字符集，并包含了常用的 300 到 700 字重。&lt;/p&gt;
+&lt;p&gt;在调试的过程中，我注意到 Inter 是一款可变字体，只需加载一个智能的字体文件，就可以让浏览器通过算法“生成”指定范围内的任何字重。其 &lt;code&gt;@font-face&lt;/code&gt; 规则里的 &lt;code&gt;font-weight&lt;/code&gt; 不管是多少都是指向同一个字体文件——Inter-Thin。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!TIP]
+在调试字体显示时，可按 &lt;code&gt;F12&lt;/code&gt; 键打开浏览器的&lt;code&gt;开发人员工具&lt;/code&gt;，切换到&lt;code&gt;元素&lt;/code&gt;面板，接着按 &lt;code&gt;Ctrl+Shift+C&lt;/code&gt; 键（或点击左上角的“选择元素”图标），在页面上点击要检查的元素。随后，在开发人员工具右下角找到并展开&lt;code&gt;已计算&lt;/code&gt;面板，滚动到底部即可查看&lt;code&gt;呈现的字体&lt;/code&gt;信息。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;友链&lt;/h2&gt;
+&lt;p&gt;Firefly 主题内置并默认开启友链页面。友链（友情链接）页面，初看只是列出跟本博客相关或有过联系的网站链接，从而提升对方网站的曝光率。但我在 AI 上询问得到了令人惊奇的回答，其中，对博主自身的好处有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;构建个人知识网络和灵感&lt;/li&gt;
+&lt;li&gt;塑造和表达博客的“个性”和“品味”&lt;/li&gt;
+&lt;li&gt;融入社区，获得归属感&lt;/li&gt;
+&lt;li&gt;潜在的流量回流和 SEO 益处&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;friendsConfig.ts&lt;/code&gt; 文件用于配置友链页面下的友链，例如可以添加 &lt;a href=&quot;https://github.com/matsuzaka-yuki/Mizuki&quot;&gt;Mizuki&lt;/a&gt; 和 &lt;a href=&quot;https://github.com/saicaca/fuwari&quot;&gt;fuwari&lt;/a&gt; 这两个跟主题相关的友情链接。&lt;/p&gt;
+&lt;p&gt;我在文件里添加：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  // ...
+  {
+    &quot;title&quot;: &quot;Mizuki&quot;,
+    imgurl: &quot;https://mizuki.mysqil.com/_astro/avatar.Nvq3-FmN_Z28HWf5.webp&quot;,
+    desc: &quot;融合Android原生质感与二次元美学：Material Design 3规范下的Astro博客主题（Tailwind CSS实现）&quot;,
+    siteurl: &quot;https://github.com/matsuzaka-yuki/Mizuki&quot;,
+    tags: [&quot;GitHub&quot;, &quot;Theme&quot;],
+    weight: 9,
+    enabled: true,
+  },
+  {
+    title: &quot;fuwari&quot;,
+    imgurl: &quot;https://fuwari.vercel.app/_astro/demo-avatar.CxcI0ivM_1nbuVe.webp&quot;,
+    desc: &quot;✨A static blog template built with Astro.&quot;,
+    siteurl: &quot;https://github.com/saicaca/fuwari&quot;,
+    tags: [&quot;GitHub&quot;, &quot;Theme&quot;],
+    weight: 9,
+    enabled: true,
+  },
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;友链页面下面的自定义内容在 &lt;code&gt;src/content/spec/friends.md&lt;/code&gt; 文件里，稍微修改一下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;...
+- 站点名称: 夏夜流萤
+- 站点描述: 飞萤之火自无梦的长夜亮起，绽放在终竟的明天。
+- 站点链接: https://blog.cuteleaf.cn
++ 站点名称: 未来之蓝
++ 站点描述: 心怀蔚蓝愿景，脚踏实地前行。每一篇记录都是通向理想未来的坚实脚印。
++ 站点链接: https://xpfxzxc.github.io
+头像链接: https://q1.qlogo.cn/g?b=qq&amp;amp;nk=7618557&amp;amp;s=640
+
+## ✉️申请友链
+
+- 请将您的网站信息发送邮件至：`xxx@xxx.com`
++ 请将您的网站信息发送邮件至：`xpfxzxc@gmail.com`
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;追番&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://bangumi.tv/&quot;&gt;&lt;strong&gt;Bangumi&lt;/strong&gt;&lt;/a&gt;，名字来源于日语的“番组”（节目），致力于让阿宅们拥有一个轻松便捷独特的交流与沟通环境。目前设有五大分区：动画、书籍、音乐、游戏、三次元。&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;siteConfig.ts&lt;/code&gt; 文件里可以配置 Bangumi 用户 ID，用于在追番页面下显示该用户的收藏列表。&lt;/p&gt;
+&lt;p&gt;将 &lt;code&gt;bangumi&lt;/code&gt; 字段下的 &lt;code&gt;userId&lt;/code&gt; 的值改为自己的 Bangumi 用户 ID 即可：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// 追番配置
+bangumi: {
+-  userId: &quot;1163581&quot;, // 在此处设置你的Bangumi用户ID
++  userId: &quot;1175686&quot;, // 在此处设置你的Bangumi用户ID
+},
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;赞助&lt;/h2&gt;
+&lt;p&gt;赞助页面为博主提供一个渠道，来接受读者自愿性、直接的财务支持，通过支付宝/微信的一次性赞助，或者像&lt;strong&gt;爱发电&lt;/strong&gt;等平台的定期赞助等。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;sponsorConfig.ts&lt;/code&gt; 文件可以对赞助页面进行配置，需要将 &lt;code&gt;public/assets/images/sponsor&lt;/code&gt; 目录下的 &lt;code&gt;alipay.png&lt;/code&gt; 和 &lt;code&gt;wechat.png&lt;/code&gt; 二维码图片替换成自己的收款二维码图片。&lt;/p&gt;
+&lt;p&gt;不过，微信 APP 和淘宝 APP 默认生成的收款二维码中自带头像。如果觉得这些收款二维码中的头像不好看，可以借助工具先解码二维码再重新生成二维码。更进一步的，甚至可以自定义二维码样式。&lt;/p&gt;
+&lt;p&gt;有两个网站用于方便解码和自定义生成二维码图片：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://tool.lu/qrcode&quot;&gt;在线生成二维码 - 在线工具&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://ma3you.com&quot;&gt;码上游&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果二维码的尺寸较大，可以使用 ImageMagick 工具去调整大小，例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;magick wechat.png -resize 400x400 -filter Lanczos wechat.png
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;根据实际需求，我将 &lt;code&gt;sponsorConfig.ts&lt;/code&gt; 文件内容改成：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import type { SponsorConfig } from &quot;../types/config&quot;;
+
+export const sponsorConfig: SponsorConfig = {
+  title: &quot;&quot;, // 页面标题，如果留空则使用 i18n 中的翻译
+  description:
+    &quot;&quot;, // 页面描述文本，如果留空则使用 i18n 中的翻译
+  usage:
+-    &quot;您的赞助将用于服务器维护、内容创作和功能开发，帮助我持续提供优质内容。&quot;, // 赞助用途说明
++    &quot;您的赞助将用于内容创作，帮助我持续提供优质内容。&quot;, // 赞助用途说明
+  // 是否显示赞助者列表
+  showSponsorsList: true,
+  // 是否在文章详情页底部显示赞助按钮
+  showButtonInPost: true,
+
+  // 赞助方式列表
+  methods: [
+    {
+      name: &quot;支付宝&quot;,
+      icon: &quot;fa6-brands:alipay&quot;,
+      qrCode: &quot;/assets/images/sponsor/alipay.png&quot;, // 收款码图片路径（需要放在 public 目录下）
+      link: &quot;&quot;,
+      description: &quot;使用 支付宝 扫码赞助&quot;,
+      enabled: true,
+    },
+    {
+      name: &quot;微信&quot;,
+      icon: &quot;fa6-brands:weixin&quot;,
+      qrCode: &quot;/assets/images/sponsor/wechat.png&quot;, // 收款码图片路径
+      link: &quot;&quot;,
+      description: &quot;使用 微信 扫码赞助&quot;,
+      enabled: true,
+    },
+-    {
+-      name: &quot;爱发电&quot;,
+-      icon: &quot;simple-icons:afdian&quot;,
+-      qrCode: &quot;&quot;,
+-      link: &quot;https://afdian.com/a/cuteleaf&quot;,
+-      description: &quot;通过 爱发电 进行赞助&quot;,
+-      enabled: true,
+-    },
+-    {
+-      name: &quot;Github&quot;,
+-      icon: &quot;fa6-brands:github&quot;,
+-      qrCode: &quot;&quot;,
+-      link: &quot;https://github.com/CuteLeaf/Firefly&quot;,
+-      description: &quot;点个Star就是最大的支持&quot;,
+-      enabled: true,
+-    },
+  ],
+
+  // 赞助者列表（可选）
+  sponsors: [
+-    // 示例：已实名赞助者
+-    {
+-      name: &quot;夏叶&quot;,
+-      amount: &quot;¥50&quot;,
+-      date: &quot;2025-10-01&quot;,
+-      message: &quot;感谢分享！&quot;,
+-    },
+-    // 示例：匿名赞助者
+-    {
+-      name: &quot;匿名用户&quot;,
+-      amount: &quot;¥20&quot;,
+-      date: &quot;2025-10-01&quot;,
+-    },
+  ],
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;关于我&lt;/h2&gt;
+&lt;p&gt;“关于我”页面就是博客里专门用来介绍“我是谁、为什么写这个博客、在做什么”的地方。&lt;/p&gt;
+&lt;p&gt;可在 &lt;code&gt;src/content/spec/about.md&lt;/code&gt; 文件里修改“关于我”页面的内容。&lt;/p&gt;
+&lt;p&gt;我将该文件内容改为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# 关于我 / About Me
+
+-你好！我是 **夏叶** ，一个在数字世界中默默无闻的一片叶子。
++欢迎来到我的小角落。这里，主要是我写给自己看的一些文字和记录。很高兴你路过这里，并驻足阅读。
++
++我是 **xpfxzxc**。这个昵称很久前就开始使用了，但我忘记了这个昵称如何是取的，这个昵称可能没有什么含义吧。
++
++我是一个 98 后的听障人，不擅长言语沟通，头脑反应略慢，没创作灵感，平时喜欢独来独往、在网上冲浪。没有什么特长，唯一我比较懂的就是编程和游戏了，但在圈子里算是在底层水平，在日常上也不太拿得出手。我对编程曾充满热情，现在有点生疏，仍然“玩”得不太懂，但不想放弃。
++
++建立这个博客的初衷是我单纯地想试试部署好看的个人博客，还有记录以后学习到的技能知识。有时头脑里会有较多的想法，此时如果能够主动去梳理思路并记录下来，对当前和以后都会颇有收获。
++
++这里可能没有干货和指南，只有非常个人的、不成熟的想法和个人学习记录。如果你在我的文字里，找到了一丝共鸣，或者从中受到启发，或者从中成功解决某些疑惑，那将是我莫大的荣幸。
++
++欢迎你在想说话的时候，通过评论或邮件与我分享你的感受。我不一定会及时回复，但会认真阅读。
+
+## 🛠️ 关于本站
+
+-这个网站使用 **Astro** 框架构建，采用了 [Firefly](https://github.com/CuteLeaf/Firefly)模板
++这个网站使用 **Astro** 框架构建，采用了 [Firefly](https://github.com/CuteLeaf/Firefly) 主题。
+
+
+**Firefly** 是一款基于 Astro 框架开发的清新美观且现代化个人博客主题，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
+
+-
+-**🖥️在线预览： [Firefly - Demo site](https://firefly.cuteleaf.cn/)**
+-
+-**🏠我的博客： [https://blog.cuteleaf.cn](https://blog.cuteleaf.cn/)**
+-
+-**📝Firefly使用文档： [https://docs-firefly.cuteleaf.cn](https://docs-firefly.cuteleaf.cn/)**
+-
+-**⭐Firefly开源地址：https://github.com/CuteLeaf/Firefly** 
+-
+::github{repo=&quot;CuteLeaf/Firefly&quot;}
+
+-&amp;lt;img src=&quot;/assets/images/firefly.png&quot; /&amp;gt;
+-
+-
+
+## 📫 联系方式
+
+如果你想和我交流技术问题，分享有趣的想法，或者只是想打个招呼，欢迎通过以下方式联系我：
+
+-* 💻 **GitHub**: [CuteLeaf](https://github.com/CuteLeaf)
+-* ✉️ **Email**: [xiaye@msn.com](mailto:xiaye@msn.com)
++* 💻 **GitHub**：[xpfxzxc](https://github.com/xpfxzxc)
++* ✉️ **Email**：[xpfxzxc@gmail.com](mailto:xpfxzxc@gmail.com)
+
+---
+
+-*感谢你的来访！希望在这里能找到对你有用的内容。Firefly博客系统完全开源，如果喜欢的话，不妨给个GitHub点个Star ⭐ 支持一下！*
++*感谢你的来访！希望在这里能找到对你有用的内容。如果想感谢或者想支持我继续创作，可以访问我的赞助页面。*
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;广告&lt;/h2&gt;
+&lt;p&gt;广告栏内容的相关配置在 &lt;code&gt;adConfig.ts&lt;/code&gt; 文件中。如需启用广告栏组件，则需在 &lt;code&gt;sidebarConfig.ts&lt;/code&gt; 文件中进行相应配置。与站点公告类似，广告内容不一定局限于“广告”形式，例如也可以用于引导访客前往赞助页面。&lt;/p&gt;
+&lt;p&gt;我将相关配置改成引导访客前往赞助页面：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// ...
+// 广告配置2 - 完整内容广告
+export const adConfig2: AdConfig = {
+  title: &quot;支持博主&quot;,
+  content:
+-    &quot;如果您觉得本站内容对您有帮助，欢迎支持我们的创作！您的支持是我们持续更新的动力。&quot;,
++    &quot;如果您觉得本站内容对您有帮助，欢迎支持我的创作！您的支持将激励我持续提供优质内容。&quot;,
+  image: {
+    src: &quot;/assets/images/d2.webp&quot;,
+    alt: &quot;支持博主&quot;,
+-    link: &quot;about/&quot;,
++    link: &quot;/sponsor/&quot;,
+    external: false,
+  },
+  link: {
+    text: &quot;支持一下&quot;,
+-    url: &quot;about/&quot;,
++    url: &quot;/sponsor/&quot;,
+    external: false,
+  },
+  closable: true,
+  displayCount: -1,
+  padding: {
+    // all: &quot;1rem&quot;,
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后开启该广告栏组件：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  // 组件类型：广告栏组件 2
+  type: &quot;advertisement&quot;,
+  // 是否启用该组件
+-  enable: false,
++  enable: true
+  // 组件显示顺序
+  order: 7,
+  // 组件位置：&quot;sticky&quot; 表示粘性定位
+  position: &quot;sticky&quot;,
+  // CSS 类名
+  class: &quot;onload-animation&quot;,
+  // 动画延迟时间
+  animationDelay: 350,
+  // 配置ID：使用第二个广告配置
+  configId: &quot;ad2&quot;,
+},
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;收尾&lt;/h2&gt;
+&lt;p&gt;完成了这些配置，个人博客便焕然一新，颇具个人风格了。接下来即可将变动提交并推送至线上。在此过程中，最好遵循 &lt;strong&gt;Git&lt;/strong&gt; 最佳实践中的&lt;strong&gt;原子性提交&lt;/strong&gt;原则，即每个 Commit 只包含单一、完整的逻辑变更，目的清晰，以避免产生中间状态。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;元数据配置&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;目前，&lt;code&gt;siteConfig.ts&lt;/code&gt; 文件混杂着多个模块的改动，不适合一股脑全提交。虽然可以“倒回去分步提交”，但是有更省力的办法：用 &lt;code&gt;git add -p &amp;lt;文件名&amp;gt;&lt;/code&gt; 交互式分块暂存，将一个文件的多处改动拆开，分批提交。&lt;/p&gt;
+&lt;p&gt;Git 会逐块显示差异，并询问如何处理每一块，例如：&lt;code&gt;(1/5) Stage this hunk [y,n,q,a,d,j,J,g,/,s,e,p,?]?&lt;/code&gt;。可以输入以下常用命令：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;命令&lt;/th&gt;
+&lt;th&gt;含义&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;y&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;接受（暂存）当前块&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;n&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;跳过当前块（不暂存）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;s&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;将当前块进一步拆分成更小的块（如果可拆）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;e&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;手动编辑当前块（高级用法，需熟悉 diff 格式）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;q&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;退出，不再处理后续块&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;?&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;显示帮助信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre&gt;&lt;code&gt;git add -p src/config/siteConfig.ts
+git commit -m &quot;chore: 更新站点元数据（标题、描述、关键词）&quot;
+git add public/assets/images/favicon.ico
+git commit -m &quot;chore: 更新 Favicon 图标&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;站点 Logo 和名称&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add -p src/config/siteConfig.ts
+git rm public/assets/images/LiuYingPure3.svg
+git add public/assets/images/logo.ico
+git commit -m &quot;chore: 更新站点 Logo 和名称&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;个人基本资料&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/profileConfig.ts
+git add public/assets/images/avatar.webp
+git commit -m &quot;feat: 完善个人基本资料（头像、名称、介绍、社交媒体链接）&quot; -m &quot;- 更新个人基本信息（名称、介绍）&quot; -m &quot;替换个人头像图片&quot; -m &quot;调整现有社交媒体链接&quot; -m &quot;新增两个社交媒体平台链接&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;站点公告&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/announcementConfig.ts
+git commit -m &quot;feat: 更新站点公告配置&quot; -m &quot;- 更新公告标题和内容文案&quot; -m &quot;- 设置为不可关闭的永久显示模式&quot; -m &quot;- 移除公告链接按钮功能&quot;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;导航栏&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/navBarConfig.ts
+git commit -m &quot;feat: 更新导航栏&quot; -m &quot;- 调整现有导航链接地址&quot; -m &quot;- 新增两个导航链接按钮&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;背景壁纸&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add -p src/config/siteConfig.ts
+git add public/assets/images/d1.webp
+git add public/assets/images/m1.webp
+git commit -m &quot;feat: 完善背景壁纸显示效果&quot; -m &quot;- 替换桌面端和移动端背景壁纸图片资源&quot; -m &quot;- 调整横幅模式下图片位置和主副标题内容&quot; -m &quot;- 优化全屏壁纸模式下遮罩层模糊程度&quot; -m &quot;- 完善壁纸来源信息显示设置&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;主题色&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add -p src/config/siteConfig.ts
+git commit -m &quot;feat: 更新主题色配置&quot; -m &quot;- 调整主题色的颜色&quot; -m &quot;- 锁定主题色选择器，对访客隐藏&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;字体&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/fontConfig.ts
+git commit -m &quot;feat: 更新字体配置&quot; -m &quot;- 调整 font-family 字体栈&quot; -m &quot;- 引入新的 @font-face 字体规则&quot; -m &quot;- 替换默认字体风格&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;友链&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/friendsConfig.ts
+git add src/content/spec/friends.md
+git commit -m &quot;feat: 更新友链页面内容&quot; -m &quot;- 修改友链页面介绍文本内容&quot; -m &quot;- 新增两个友链条目&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;追番&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/siteConfig.ts
+git commit -m &quot;chore: 更新 Bangumi 用户 ID&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;赞助&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/sponsorConfig.ts
+git add public/assets/images/sponsor/alipay.png
+git add public/assets/images/sponsor/wechat.png
+git commit -m &quot;chore: 更新赞助页面信息和支付码&quot; -m &quot;- 调整赞助说明内容&quot; -m &quot;- 更新赞助方式列表&quot; -m &quot;- 替换支付宝和微信支付二维码&quot; -m &quot;- 清空赞助者列表&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;关于我&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/content/spec/about.md
+git commit -m &quot;chore: 更新关于我页面内容&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;广告&lt;/strong&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/adConfig.ts
+git add src/config/sidebarConfig.ts
+git add public/assets/images/d2.webp
+git commit -m &quot;feat: 启用赞助引导广告栏&quot; -m &quot;- 开启赞助引导广告栏组件显示&quot; -m &quot;- 更新引导文案内容&quot; -m &quot;- 调整图片和按钮链接指向赞助页面&quot; -m &quot;- 替换展示图片&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;最后，将代码推送到远程仓库：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git push origin custom
+&lt;/code&gt;&lt;/pre&gt;
+</content:encoded></item><item><title>基于 Firefly 主题的 Astro 博客部署（二）：文章发布</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part2/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part2/</guid><description>记录了自己在基于 Firefly 主题的 Astro 博客上，对文章文件各要素的探索与简单总结，并接触到 Front matter 和 Markdown 扩展语法。</description><pubDate>Mon, 03 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;在成功将博客站点部署到 &lt;strong&gt;GitHub Pages&lt;/strong&gt; 上后，我打算暂不修改博客的个人资料（如个人名称、头像、介绍、公告、背景图等），而是先撰写文章再发布，所以首先研究一下这部分。&lt;/p&gt;
 &lt;h2&gt;探索&lt;/h2&gt;
 &lt;p&gt;在博客主页中可以看到，刚部署后的博客自带了几篇示例文章。这些示例文章是 &lt;a href=&quot;https://github.com/CuteLeaf/Firefly&quot;&gt;&lt;strong&gt;Firefly&lt;/strong&gt;&lt;/a&gt; 主题作者特意留下的，里面讲解了在撰写文章时可以用的 &lt;strong&gt;Markdown&lt;/strong&gt; 语法。&lt;/p&gt;
 &lt;h3&gt;文章位置&lt;/h3&gt;
