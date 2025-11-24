@@ -1,4 +1,531 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>未来之蓝 | xpfxzxc 的个人博客 - 个人学习和日常零散想法的记录空间，内容随性且不定期更新</title><description>未来之蓝是 xpfxzxc 的个人博客，记录个人学习和日常零散想法。心怀蔚蓝愿景，脚踏实地前行。每一篇记录都是通向理想未来的坚实脚印。</description><link>https://xpfxzxc.github.io/</link><language>zh_CN</language><item><title>基于 Firefly 主题的 Astro 博客部署（三）：站点配置修改</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part3/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part3/</guid><description>记录了自己在基于 Firefly 主题的 Astro 博客上修改个人名称、头像、介绍、公告、背景壁纸等配置的操作。</description><pubDate>Thu, 06 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;在成功地在 &lt;strong&gt;GitHub Pages&lt;/strong&gt; 上部署了博客，并紧接着在博客上发布文章后，看着自己撰写的文章被编排、美化成好看的页面显示在博客网站上，我的内心里瞬间有了以后在博客上撰写文章的动力。&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>未来之蓝 | xpfxzxc 的个人博客 - 个人学习和日常零散想法的记录空间，内容随性且不定期更新</title><description>未来之蓝是 xpfxzxc 的个人博客，记录个人学习和日常零散想法。心怀蔚蓝愿景，脚踏实地前行。每一篇记录都是通向理想未来的坚实脚印。</description><link>https://xpfxzxc.github.io/</link><language>zh_CN</language><item><title>基于 Firefly 主题的 Astro 博客部署（四）：giscus 评论系统配置</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part4/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part4/</guid><description>记录了自己在基于 Firefly 主题的 Astro 博客上配置启用 giscus 评论系统，并简单总结了该评论系统的部分流程。</description><pubDate>Wed, 12 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;站点经过批量配置更新后，如今已颇具辨识度。尽管整体结构仍保留着 &lt;a href=&quot;https://github.com/CuteLeaf/Firefly&quot;&gt;&lt;strong&gt;Firefly&lt;/strong&gt;&lt;/a&gt; 主题的影子，但最起码能让访客一眼将它与其他博客区分开来。&lt;/p&gt;
+&lt;p&gt;目前，访客在站内仅能通过点击链接跳转页面、阅读内容。尚缺少一个公开的交流渠道，让访客与访客、博主与访客之间能够直接对话，引入评论系统势在必行。虽然之前设置过 Email 地址、&lt;strong&gt;GitHub&lt;/strong&gt; 链接等，但这些渠道不够直接，也缺乏公开讨论的氛围。要知道，有时评论的价值甚至超越文章本身，沉淀下来的评论也能为后来的访客提供宝贵的线索与回顾。&lt;/p&gt;
+&lt;h2&gt;选择&lt;/h2&gt;
+&lt;p&gt;回想我最初对博客部署的核心需求：快速开始、无需支付服务器和域名的定期费用、界面风格现代，外观精美、可定制化。这些需求也同样延伸到了对评论系统的考量上，并进一步考虑到第三方登录、数据所有权、浏览量统计等方面。&lt;/p&gt;
+&lt;p&gt;Firefly 主题内置了四种供选择使用的评论系统：&lt;a href=&quot;https://twikoo.js.org&quot;&gt;&lt;strong&gt;Twikoo&lt;/strong&gt;&lt;/a&gt;、&lt;a href=&quot;https://waline.js.org&quot;&gt;&lt;strong&gt;Waline&lt;/strong&gt;&lt;/a&gt;、&lt;a href=&quot;https://giscus.app&quot;&gt;&lt;strong&gt;giscus&lt;/strong&gt;&lt;/a&gt;、&lt;a href=&quot;https://disqus.com&quot;&gt;&lt;strong&gt;Disqus&lt;/strong&gt;&lt;/a&gt;。经过调研，得到下面对比结果：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;需求&lt;/th&gt;
+&lt;th&gt;Twikoo&lt;/th&gt;
+&lt;th&gt;Waline&lt;/th&gt;
+&lt;th&gt;giscus&lt;/th&gt;
+&lt;th&gt;Disqus&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;快速开始&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 快&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 快&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐ 很快&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐ 极快（注册即用）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;无需定期费用&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 可完全免费&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 可完全免费&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐ 完全免费&lt;/td&gt;
+&lt;td&gt;⭐⭐ 免费版含广告，去广告/高级功能需付费&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;界面现代美观&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 默认较简洁&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐ 默认较现代&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 原生 GitHub 风格&lt;/td&gt;
+&lt;td&gt;⭐⭐ 默认较现代、杂乱，但含广告&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;可定制化&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐ 高&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐ 高&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 有限&lt;/td&gt;
+&lt;td&gt;⭐⭐ 较低&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;第三方登录&lt;/td&gt;
+&lt;td&gt;⭐ 不支持，只需填写昵称和邮箱&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐ 支持国内外社交账号&lt;/td&gt;
+&lt;td&gt;⭐⭐ 仅支持 GitHub 登录&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐ 支持国外社交账号&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;数据所有权&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐ 完全自己掌握&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐ 完全自己掌握&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 自己掌握数据在 GitHub 仓库中，公开透明&lt;/td&gt;
+&lt;td&gt;⭐⭐ 归属于 Disqus&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;浏览量统计&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 支持&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐ 支持&lt;/td&gt;
+&lt;td&gt;⭐ 不支持&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐ 提供基础访问分析，但含广告追踪&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;综上来看，可以给出选择依据了：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不选 Twikoo：如果不想自行部署或者注重身份识别&lt;/li&gt;
+&lt;li&gt;不选 Waline：如果不想自行部署或者不注重身份识别&lt;/li&gt;
+&lt;li&gt;不选 GitHub：如果希望完全自己掌控或者需要除 GitHub 以外的第三方登录方式&lt;/li&gt;
+&lt;li&gt;不选 Disqus：如果希望自己完全掌控或者无法接受页面中嵌入广告&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;对于刚才提出的需求，这四种评论系统其实都基本满足，但在逐一权衡后，我采用了排除法进行决策：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Disqus：因免费版包含广告，首先排除&lt;/li&gt;
+&lt;li&gt;Twikoo：希望强制评论者进行身份验证，因此排除&lt;/li&gt;
+&lt;li&gt;Waline：虽然功能强大，但我对免费数据库的数据持久性和请求延迟存疑。相比之下，没有任何免费平台比 GitHub 更能让我对数据安全放心，因此忍痛割舍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;最终，考虑到我已经将博客部署于 GitHub Pages，那就索性地用 giscus 好了。虽然浏览量统计的功能，我还是希望有的，但胜在数据安全与深度集成。若未来迁移到云平台上部署，届时再考虑切换至 Waline。&lt;/p&gt;
+&lt;h2&gt;实操&lt;/h2&gt;
+&lt;p&gt;按照 giscus 主页的说明一步一步地操作，并结合 Firefly 主题代码来修改就好。由于 Firefly 主题已经集成好评论系统，所以使用起来很简单。&lt;/p&gt;
+&lt;h3&gt;原理&lt;/h3&gt;
+&lt;p&gt;简单来说，giscus 利用 GitHub Discussions 作为评价系统的后端，通过 &lt;strong&gt;GitHub App&lt;/strong&gt; 和前端嵌入脚本，在静态网站上实现动态评论功能。&lt;/p&gt;
+&lt;p&gt;下面是它的工作原理分解：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;将 &lt;strong&gt;GitHub Discussions&lt;/strong&gt; 作为评论系统的后端（需要手动在仓库设置里开启）&lt;/li&gt;
+&lt;li&gt;仓库维护者通过安装 &lt;a href=&quot;https://github.com/apps/giscus&quot;&gt;&lt;strong&gt;giscus App&lt;/strong&gt;&lt;/a&gt;，授予它能读写指定的公开仓库的 Discussions 的权限&lt;/li&gt;
+&lt;li&gt;在前端借助 &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; 标签嵌入 giscus 提供的脚本并传入参数，作用是：
+&lt;ul&gt;
+&lt;li&gt;giscus 加载时会使用 &lt;a href=&quot;https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions&quot;&gt;&lt;strong&gt;GitHub Discussions 搜索 API&lt;/strong&gt;&lt;/a&gt; 根据选定的映射方式（如 URL、&lt;code&gt;pathname&lt;/code&gt;、&lt;code&gt;&amp;lt;title&amp;gt;&lt;/code&gt; 等）来查找与当前页面关联的 discussion。如果找不到匹配的 discussion，giscus 就会在第一次有人留下评论或回应时自动创建一个 discussion&lt;/li&gt;
+&lt;li&gt;动态加载评论界面&lt;/li&gt;
+&lt;li&gt;向 giscus 服务发起请求，带上当前页面的标识&lt;/li&gt;
+&lt;li&gt;将 discussion 的评论内容渲染到页面上&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;访客需要 GitHub 账号，按照 &lt;strong&gt;OAuth&lt;/strong&gt; 流程登录，授予 giscus App 代表他发布评论的权限（不过从源码可知，实际是 giscus 前端代表访客发布评论的），因为 GitHub 的写操作 API（如创建评论）必须携带访客 OAuth token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由此可见，这过程依赖第三方服务（giscus.app）。由于它是开源的，所以也可以自建。&lt;/p&gt;
+&lt;h3&gt;步骤&lt;/h3&gt;
+&lt;h4&gt;1. 启用 GitHub Discussions&lt;/h4&gt;
+&lt;p&gt;在 &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt; （将 &lt;code&gt;&amp;lt;username&amp;gt;&lt;/code&gt; 替换为 GitHub 用户名，下文同理）仓库页面下，点击顶部导航栏的 &lt;code&gt;Settings&lt;/code&gt; → 向下滚动页面至 &lt;code&gt;Features&lt;/code&gt; 部分 → 勾选 &lt;code&gt;Discussions&lt;/code&gt; 选项，开启仓库的 Discussions 功能。&lt;/p&gt;
+&lt;h4&gt;2. 安装 giscus GitHub App&lt;/h4&gt;
+&lt;p&gt;访问 &lt;a href=&quot;https://github.com/apps/giscus&quot;&gt;GitHub App - giscus&lt;/a&gt; → 点击页面右侧栏的 &lt;code&gt;Install&lt;/code&gt; 按钮 → 选择 &lt;code&gt;Only select repositories&lt;/code&gt; → 点击 &lt;code&gt;Select repositories&lt;/code&gt; 下拉列表 → 选择 &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt; 项 → 点击 &lt;code&gt;Install&lt;/code&gt; 按钮 → 输入登录密码，确认权限。&lt;/p&gt;
+&lt;h4&gt;3. 修改配置文件&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;src/config/commentConfig.ts&lt;/code&gt; 文件存放着关于评论系统的配置。先配置启用 &lt;code&gt;giscus&lt;/code&gt; 评论系统，然后依次设置 &lt;code&gt;repo&lt;/code&gt;、&lt;code&gt;repoId&lt;/code&gt;、&lt;code&gt;category&lt;/code&gt;、&lt;code&gt;categoryId&lt;/code&gt; 字段，其中 &lt;code&gt;category&lt;/code&gt; 字段选择 &lt;code&gt;Announcements&lt;/code&gt;（只有仓库的维护者和 giscus App 本身可以在“Announcements”分类中创建新的 discussion），其他字段根据代码注释去设置。建议先在 giscus 主页上配置下，再将配置的值填入到代码中。&lt;/p&gt;
+&lt;p&gt;我将文件内容改为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import type { CommentConfig } from &quot;../types/config&quot;;
+
+export const commentConfig: CommentConfig = {
+-  type: &apos;none&apos;, // 当前启用的评论系统类型: none, twikoo, waline, giscus, disqus，默认为none，即不启用评论系统。
++  type: &apos;giscus&apos;, // 当前启用的评论系统类型: none, twikoo, waline, giscus, disqus，默认为none，即不启用评论系统。
+  // ...
+  //giscus评论系统配置（还未测试）
+  giscus: {
+-    repo: &apos;CuteLeaf/Firefly&apos;, // 设置 Giscus 评论系统仓库
+-    repoId: &apos;R_kgD2gfdFGd&apos;, // 设置 Giscus 评论系统仓库ID
+-    category: &apos;General&apos;, // 设置 Giscus 评论系统分类
+-    categoryId: &apos;DIC_kwDOKy9HOc4CegmW&apos;, // 设置 Giscus 评论系统分类ID
++    repo: &apos;xpfxzxc/xpfxzxc.github.io&apos;, // 设置 Giscus 评论系统仓库
++    repoId: &apos;R_kgDOQIvG_Q&apos;, // 设置 Giscus 评论系统仓库ID
++    category: &apos;Announcements&apos;, // 设置 Giscus 评论系统分类
++    categoryId: &apos;DIC_kwDOQIvG_c4Cxnv0&apos;, // 设置 Giscus 评论系统分类ID
+    mapping: &apos;title&apos;, // 设置 Giscus 评论系统映射方式
+    strict: &apos;0&apos;, // 设置 Giscus 评论系统严格模式
+    reactionsEnabled: &apos;1&apos;, // 设置 Giscus 评论系统反应功能
+    emitMetadata: &apos;1&apos;, // 设置 Giscus 评论系统元数据
+    inputPosition: &apos;top&apos;, // 设置 Giscus 评论系统输入位置
+    theme: &apos;light&apos;, // 设置 Giscus 评论系统主题
+    lang: &apos;zh-CN&apos;, // 设置 Giscus 评论系统语言
+    loading: &apos;lazy&apos;, // 设置 Giscus 评论系统加载方式
+  },
+  // ...
+};
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;提交更改并推送至线上&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;git add src/config/commentConfig.ts
+git commit -m &quot;feat: 启用 giscus 评论系统&quot; -m &quot;- 启用评论功能，类型设置为 giscus&quot; -m &quot;- 配置个人 GitHub 仓库作为评论存储&quot; -m &quot;- 设置分类等交互选项&quot;
+git push origin custom
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;扩展内容：OAuth 2.0&lt;/h2&gt;
+&lt;p&gt;在博客页面下，若想通过使用 API 向 GitHub 提交评论至相应的 discussion，必须携带 GitHub 账号登录凭证或者授权令牌。否则 GitHub 将拒绝该请求，这意味着无法匿名评论 —— 每一条评论都需以某一 GitHub 用户的身份发布。&lt;/p&gt;
+&lt;p&gt;从访客的角度来看，在第三方博客页面直接输入 GitHub 账号和密码，通常存在安全风险，一般访客会对此有所顾虑。此外，受浏览器&lt;strong&gt;同源策略&lt;/strong&gt;的限制，博客网站无法直接获取到 GitHub 域下的凭证信息，哪怕访客当前已在 GitHub 上保持登录状态。&lt;/p&gt;
+&lt;h3&gt;目的&lt;/h3&gt;
+&lt;p&gt;OAuth 2.0 就是为了解决上述问题而生的！它允许&lt;strong&gt;资源所有者&lt;/strong&gt;（访客）在不分享密码的情况下，允许&lt;strong&gt;授权服务器&lt;/strong&gt;（GitHub）授权一个第三方应用（&lt;strong&gt;客户端&lt;/strong&gt;，giscus App）有限地访问存储在另一个服务（&lt;strong&gt;资源服务器&lt;/strong&gt;，GitHub）上的资源。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!NOTE]
+虽说可以让博客站点成为类似 giscus 这样“第三方应用”的存在，从而不需要 giscus 服务，但是这增加了维护后端的负担。而且，访客是否愿意信任博客站点，这也是一个问题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;OAuth 2.0 里有 4 种授权模式，这里只讲解&lt;strong&gt;授权码模式&lt;/strong&gt;，该模式是最安全、最常用，适用于有后端的 Web 应用。&lt;/p&gt;
+&lt;h3&gt;授权码模式&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;流程：
+&lt;ol&gt;
+&lt;li&gt;用户访问客户端，客户端将用户重定向到授权服务器&lt;/li&gt;
+&lt;li&gt;用户在授权服务器上登录并同意授权&lt;/li&gt;
+&lt;li&gt;授权服务器将用户重定向回客户端事先指定的地址（回调地址），并在 URL 中带上一个授权码&lt;/li&gt;
+&lt;li&gt;客户端的后端服务器用这个授权码，连同自己的客户端 ID 和密钥，向授权服务器请求访问令牌&lt;/li&gt;
+&lt;li&gt;授权服务器验证通过后，返回访问令牌（和可选的刷新令牌）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;优点：访问令牌不会暴露给前端浏览器，非常安全&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!NOTE]
+在实际过程中，通信时携带的数据，需查阅相关文档以确定哪些参数是必需或可选的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;例子&lt;/h3&gt;
+&lt;p&gt;在静态博客站点中借助第三方 giscus App 实现在仓库的 Discussions 发布评论，由于静态博客站点本身不具备后端服务且未注册为 GitHub App，同时还需引入第三方 giscus App 作为中介，整个授权和发布流程会因此变得相对复杂。&lt;/p&gt;
+&lt;p&gt;下面将结合博客站点、giscus App 和 giscus 代码片段具体讲解整个过程，开始前有准备工作。&lt;/p&gt;
+&lt;h4&gt;将 giscus 注册为 GitHub App&lt;/h4&gt;
+&lt;p&gt;（这步 giscus 已经做了）先部署 giscus，然后要在 &lt;a href=&quot;https://github.com/settings/apps/new&quot;&gt;Register new GitHub App&lt;/a&gt; 页面上将 giscus 注册为 GitHub App，并按照要求填入信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;GitHub App name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Description&lt;/code&gt;（可选）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Homepage URL&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Callback URL&lt;/code&gt;：使用 &lt;code&gt;https://[YOUR-DOMAIN-HERE]/api/oauth/authorized&lt;/code&gt; 作为授权回调 URL，例如：&lt;code&gt;https://giscus.app/api/oauth/authorized&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Expire user authorization tokens&lt;/code&gt;：不勾选，目前 giscus 不支持它&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Request user authorization (OAuth) during installation&lt;/code&gt;：不勾选&lt;/li&gt;
+&lt;li&gt;Webhook 部分的 &lt;code&gt;Active&lt;/code&gt;：不勾选&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Repository permissions&lt;/code&gt;：选择 &lt;code&gt;Discussions&lt;/code&gt; 的 &lt;code&gt;Access: Read &amp;amp; write&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;点击 &lt;code&gt;Create GitHub App&lt;/code&gt; 按钮后，将 giscus 注册为 GitHub App，以后称呼它为 giscus App。&lt;/p&gt;
+&lt;p&gt;一旦创建完成，就要点击 &lt;code&gt;Generate a new client secret&lt;/code&gt; 和 &lt;code&gt;Generate a private key&lt;/code&gt; 按钮分别创建客户端密钥和私钥，其中私钥会自动被下载下来。&lt;/p&gt;
+&lt;p&gt;上面的 &lt;code&gt;Callback URL&lt;/code&gt;、&lt;code&gt;App ID&lt;/code&gt;、&lt;code&gt;Client ID&lt;/code&gt;、&lt;code&gt;Client secret&lt;/code&gt;、&lt;code&gt;Private key&lt;/code&gt; 后面都会用到的。&lt;/p&gt;
+&lt;h4&gt;为仓库安装 giscus App&lt;/h4&gt;
+&lt;p&gt;在目标仓库中完成该 GitHub App 的授权安装后，GitHub 会为此次安装分配一个唯一的 &lt;strong&gt;installation ID&lt;/strong&gt;。giscus 服务端后续可凭此 ID 换取一个 &lt;strong&gt;installation access token&lt;/strong&gt;，从而获得以 App 身份在仓库中创建“Announcements”类型 discussion 的权限：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;giscus 服务端会用 App 的私钥生成一个 &lt;strong&gt;JWT&lt;/strong&gt; 用于证明“我是这个 GitHub App”&lt;/li&gt;
+&lt;li&gt;giscus 服务端接着携带该 &lt;code&gt;installation ID&lt;/code&gt; 和 &lt;code&gt;JWT&lt;/code&gt;，调用 GitHub API 请求安装令牌&lt;/li&gt;
+&lt;li&gt;经 GitHub 验证 JWT 后，服务端会得到一个 &lt;code&gt;installation access token&lt;/code&gt;，这个令牌带有仓库级别的权限（比如 Discussions 的读写）&lt;/li&gt;
+&lt;li&gt;giscus 服务端缓存它，等到需要的时候再使用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;接着，启用该仓库的 Discussions 功能，并在前端页面插入脚本并配置好后，访客就可以正常使用 giscus 评论系统了。&lt;/p&gt;
+&lt;h4&gt;授权和使用流程&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;第一步：博客站点引导访客至 GitHub 授权端点&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;当访客在博客文章页面里点击 giscus 界面上的 &lt;code&gt;使用 GitHub 登录&lt;/code&gt; 按钮后，浏览器将跳转至 giscus 的授权请求端点。此端点 URL 中已通过 &lt;code&gt;redirect_url&lt;/code&gt; 参数指定了回调地址，例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://giscus.app/api/oauth/authorize?redirect_uri=http%3A%2F%2Flocalhost%3A4321%2Fposts%2Fastro-firefly-blog-deploy-part4%2F%23comments
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这意味着，授权流程结束后，访客将被带回初始的文章页面（&lt;code&gt;http://localhost:4321/posts/astro-firefly-blog-deploy-part4/#comments&lt;/code&gt;）。&lt;/p&gt;
+&lt;p&gt;giscus App 会处理该请求，根据源码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import type { NextApiRequest, NextApiResponse } from &apos;next&apos;;
+import { encodeState } from &apos;../../../lib/oauth/state&apos;;
+import { env } from &apos;../../../lib/variables&apos;;
+
+const GITHUB_OAUTH_AUTHORIZE_URL = &apos;https://github.com/login/oauth/authorize&apos;;
+
+export default async function OAuthAuthorizeApi(req: NextApiRequest, res: NextApiResponse) {
+  const appReturnUrl = req.query.redirect_uri as string;
+
+  if (!appReturnUrl) {
+    res.status(400).json({ error: &apos;`redirect_uri` is required.&apos; });
+    return;
+  }
+
+  const { client_id } = env;
+  const proto = req.headers[&apos;x-forwarded-proto&apos;] || &apos;http&apos;;
+  const redirect_uri = `${proto}://${req.headers.host}/api/oauth/authorized`;
+  const state = await encodeState(appReturnUrl, env.encryption_password);
+
+  const oauthParams = new URLSearchParams({ client_id, redirect_uri, state });
+  res.redirect(302, `${GITHUB_OAUTH_AUTHORIZE_URL}?${oauthParams}`);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;giscus 服务端会立即构造一个特殊的 GitHub URL 并将访客的浏览器重定向过去。&lt;/p&gt;
+&lt;p&gt;例如，URL 和参数：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GET https://github.com/login/oauth/authorize?
+  client_id=Iv1.c654bd032df6a55f&amp;amp;
+  redirect_uri=https://giscus.app/api/oauth/authorized&amp;amp;
+  state=032e2710f1484e164291ddferX/0OIIoT+b4Dsmy6hhD6QimL9cdx4EN2PZdmQGrLBwfCGbC5n6pEL9mJVYEGIiakJc8ZSd34wtSoxebcDhqV2IIryat1TK+D89AK37hQyi/tDvko5swfzlYgnlMZ2qOvNgZeFqM2/Bl64oJkyc+xo0OkVNB6r5vpA==
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数讲解：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;client_id&lt;/code&gt;：giscus App 的唯一标识符。这个就是在注册为 GitHub App 后得到的 &lt;code&gt;Client ID&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;redirect_uri&lt;/code&gt;：回调地址。这是将 giscus 注册为 GitHub App 时预先填写的 &lt;code&gt;Callback URL&lt;/code&gt;。授权成功后，GitHub 会把访客（和授权码）送回这个地址。这是安全的关键，防止授权码被发送到任意地址&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;state&lt;/code&gt;：一个随机的、不可猜测的字符串。从上面 giscus 源码片段可知，它将重定向地址（博客网页地址）进行了加密并作为 &lt;code&gt;state&lt;/code&gt; 的值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;第二步：访客在 GitHub 上进行认证和授权&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;访客的浏览器被重定向到 &lt;code&gt;https://github.com/login/oauth/authorize?...&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果访客未登录 GitHub，会看到登录页面，访客需要输入 GitHub 的用户名和密码。&amp;lt;strong&amp;gt;注意：&amp;lt;/strong&amp;gt;密码是输给 GitHub 的，博客站点完全看不到&lt;/li&gt;
+&lt;li&gt;登录成功后，GitHub 会显示一个授权页面，询问访客：“Giscus by Giscus 希望获得以下许可...”，并列出请求的权限&lt;/li&gt;
+&lt;li&gt;访客点击绿色的 &lt;code&gt;Authorize giscus&lt;/code&gt; 按钮&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!NOTE]
+还有一些情况是：重定向后，需要从多个账号中选择；或者，之前已经授权过，不需要再授权。但不管怎么样，授权过程类似。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;第三步：GitHub 重定向回 giscus App 并携带授权码&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;访客点击授权后，GitHub 的授权服务器会生成一个短期有效的授权码，然后将访客的浏览器重定向到 giscus App 预先注册的回调地址（与第一步中 giscus 服务端指定的 &lt;code&gt;redirect_uri&lt;/code&gt; 参数一致），即 &lt;code&gt;https://giscus.app/api/oauth/authorized&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;URL 和参数：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GET https://giscus.app/api/oauth/authorized?
+  code=604a74dcc85e661b7a9b&amp;amp;
+  state=c036727482c11062ed961334%2FdS8DSACyyCYlAhLeDC1cK1jhxrjUGctAQQDiSm6mdevw1crmOPggFYjkPBH2cpuP5ZhHtuB5VFvmnYPJ3x6Fv%2B9YoynA667JiUnaHx6iaULJtOlH%2Bzodau0S4pVQq19p%2BigTYnhXZ%2BsyaHLhIin0rBX2w%2BeBflD9A%3D%3D
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;参数讲解：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;code&lt;/code&gt;：授权码。它是一个代表用户同意的凭证，但本身不能用来访问 API&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;state&lt;/code&gt;：原样返回第一步中传来的 &lt;code&gt;state&lt;/code&gt; 参数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;第四步：giscus App 用授权码向 GitHub 兑换访问令牌&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;giscus App 在 &lt;code&gt;/api/oauth/authorized&lt;/code&gt; 端点处理回调：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import type { NextApiRequest, NextApiResponse } from &apos;next&apos;;
+import { encodeState, decodeState } from &apos;../../../lib/oauth/state&apos;;
+import { env } from &apos;../../../lib/variables&apos;;
+
+const GITHUB_OAUTH_ACCESS_TOKEN_URL = &apos;https://github.com/login/oauth/access_token&apos;;
+const TOKEN_VALIDITY_PERIOD = 1000 * 60 * 60 * 24 * 365; // 1 year;
+
+export default async function OAuthAuthorizedApi(req: NextApiRequest, res: NextApiResponse) {
+  const code = req.query.code as string;
+  const state = req.query.state as string;
+  const error = req.query.error as string;
+
+  const { client_id, client_secret, encryption_password } = env;
+
+  let appReturnUrl: string;
+  try {
+    appReturnUrl = await decodeState(state, encryption_password);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+    return;
+  }
+
+  const returnUrl = new URL(appReturnUrl);
+
+  if (error &amp;amp;&amp;amp; error === &apos;access_denied&apos;) {
+    res.redirect(302, returnUrl.href);
+    return;
+  }
+
+  if (!code || !state) {
+    res.status(400).json({ error: &apos;`code` and `state` are required.&apos; });
+    return;
+  }
+
+  const init = {
+    method: &apos;POST&apos;,
+    body: new URLSearchParams({ client_id, client_secret, code, state }),
+    headers: {
+      Accept: &apos;application/json&apos;,
+      &apos;User-Agent&apos;: &apos;giscus&apos;,
+    },
+  };
+
+  let accessToken: string;
+  try {
+    const response = await fetch(GITHUB_OAUTH_ACCESS_TOKEN_URL, init);
+    if (response.ok) {
+      const data = await response.json();
+      accessToken = data.access_token;
+    } else {
+      throw new Error(`Access token response had status ${response.status}.`);
+    }
+  } catch (err) {
+    res.status(503).json({ error: err.message });
+    return;
+  }
+
+  const session = await encodeState(
+    accessToken,
+    encryption_password,
+    Date.now() + TOKEN_VALIDITY_PERIOD,
+  );
+  returnUrl.searchParams.set(&apos;giscus&apos;, session);
+
+  res.redirect(302, returnUrl.href);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;giscus App 会解析和验证 &lt;code&gt;state&lt;/code&gt; 参数，然后构造一个服务器对服务器的 POST 请求向 GitHub 请求访问令牌，请求体包含 &lt;code&gt;client_id&lt;/code&gt;、&lt;code&gt;client_secret&lt;/code&gt;、&lt;code&gt;code&lt;/code&gt; 和 &lt;code&gt;state&lt;/code&gt; 参数。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第五步：GitHub 返回访问令牌给 giscus App&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;GitHub 验证 &lt;code&gt;client_secret&lt;/code&gt; 和 &lt;code&gt;code&lt;/code&gt; 后，返回 JSON 数据。giscus App 从响应中提取出 &lt;code&gt;access_token&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第六步：giscus App 创建加密 Session 并重定向回博客站点&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;giscus App 没有像传统 Web 应用那样用这个 token 直接为用户创建会话 Cookie，而是将 token 安全地“传回”给博客站点上的 giscus 前端组件。&lt;/p&gt;
+&lt;p&gt;它将得到的访问令牌加密成一个名为 &lt;code&gt;session&lt;/code&gt; 的字符串，并将解密得到的 &lt;code&gt;appReturnUrl&lt;/code&gt;（即博客文章页面的地址）在其 URL 参数后附加 &lt;code&gt;?giscus=&amp;lt;加密的session字符串&amp;gt;&lt;/code&gt;，然后向访客的浏览器返回一个 302 重定向指令。&lt;/p&gt;
+&lt;p&gt;最终重定向 URL，例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GET http://localhost:4321/posts/astro-firefly-blog-deploy-part4/?
+  giscus=84c57886f2d88be979c1674dQODpjiFTL2GxjTO2QRcnHEHvvyshy%2Bxf5iI6Re5SlXkrbo6o0MkqMMLyr8X8fL3zxlSvW3IFtr5OTbmJ%2FQN%2Fw%2BDmch0KKPwK4bViYUoeI5gtD1P5WNI8d5Xg08s%3D#comments
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;访客的浏览器此刻被带回了最初的博客文章页面，并且 URL 中携带了一个神秘的 &lt;code&gt;giscus&lt;/code&gt; 参数。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第七步：静态博客网页处理 giscus 回调参数&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;当浏览器被重定向回后，嵌入在页面中的 giscus 客户端脚本（&lt;a href=&quot;https://github.com/giscus/giscus/blob/main/client.ts&quot;&gt;client.ts&lt;/a&gt;）开始工作。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;检测并存储 Session：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;// Set up session and clear the session param on load
+const url = new URL(location.href);
+let session = url.searchParams.get(&apos;giscus&apos;) || &apos;&apos;;
+const savedSession = localStorage.getItem(GISCUS_SESSION_KEY);
+url.searchParams.delete(&apos;giscus&apos;);
+url.hash = &apos;&apos;;
+const cleanedLocation = url.toString();
+
+if (session) {
+  localStorage.setItem(GISCUS_SESSION_KEY, JSON.stringify(session));
+  history.replaceState(undefined, document.title, cleanedLocation);
+} else if (savedSession) {
+  try {
+    session = JSON.parse(savedSession);
+  } catch (e) {
+    localStorage.removeItem(GISCUS_SESSION_KEY);
+    console.warn(`${formatError(e?.message)} Session has been cleared.`);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;加密的 &lt;code&gt;session&lt;/code&gt; 字符串被安全地存储在浏览器 &lt;code&gt;localStorage&lt;/code&gt; 中，URL 被清理干净。此时，前端持有了代表用户授权状态的凭证（加密的 session），但还无法直接使用它。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第八步：giscus Widget Iframe 加载并传递 Session&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;giscus 客户端脚本开始构造并加载评论组件的 Iframe。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;构造 widget 参数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;const attributes = script.dataset;
+const params: Record&amp;lt;string, string&amp;gt; = {};
+
+params.origin = cleanedLocation;
+params.session = session as string;
+params.theme = attributes.theme as string;
+params.reactionsEnabled = attributes.reactionsEnabled || &apos;1&apos;;
+params.emitMetadata = attributes.emitMetadata || &apos;0&apos;;
+params.inputPosition = attributes.inputPosition || &apos;bottom&apos;;
+params.repo = attributes.repo as string;
+params.repoId = attributes.repoId as string;
+params.category = attributes.category || &apos;&apos;;
+params.categoryId = attributes.categoryId as string;
+params.strict = attributes.strict || &apos;0&apos;;
+params.description = getMetaContent(&apos;description&apos;, true);
+params.backLink = getMetaContent(&apos;giscus:backlink&apos;) || cleanedLocation;
+
+switch (attributes.mapping) {
+  case &apos;url&apos;:
+    params.term = cleanedLocation;
+    break;
+  case &apos;title&apos;:
+    params.term = document.title;
+    break;
+  case &apos;og:title&apos;:
+    params.term = getMetaContent(&apos;title&apos;, true);
+    break;
+  case &apos;specific&apos;:
+    params.term = attributes.term as string;
+    break;
+  case &apos;number&apos;:
+    params.number = attributes.term as string;
+    break;
+  case &apos;pathname&apos;:
+  default:
+    params.term =
+      location.pathname.length &amp;lt; 2
+        ? &apos;index&apos;
+        : location.pathname.substring(1).replace(/\.\w+$/, &apos;&apos;);
+    break;
+}
+
+// Check anchor of the existing container and append it to origin URL
+const existingContainer = document.querySelector(&apos;.giscus&apos;);
+const id = existingContainer &amp;amp;&amp;amp; existingContainer.id;
+if (id) {
+  params.origin = `${cleanedLocation}#${id}`;
+}
+
+// Set up iframe src and loading attribute
+const locale = attributes.lang ? `/${attributes.lang}` : &apos;&apos;;
+const src = `${giscusOrigin}${locale}/widget?${new URLSearchParams(params)}`;
+const loading = attributes.loading === &apos;lazy&apos; ? &apos;lazy&apos; : undefined;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;最终生成的 Iframe URL：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;https://giscus.app/zh-CN/widget?
+  origin=http://localhost:4321/posts/astro-firefly-blog-deploy-part4/#comments&amp;amp;session=9217fcd7459b93e3e27c1e25V7QDChvHmxQVKInMCD9q7LmScNiJfdGOBFZalw4jOEKaUeEPkQV2pgryenES7rtkfn4u3n9deNbmgvgCPXpMb4n5QsySzFbOGounl/MNrSEd6gTuX5nGeK8j0Vw=&amp;amp;
+  repo=xpfxzxc/xpfxzxc.github.io&amp;amp;
+  repoId=R_kgDOQIvG_Q&amp;amp;
+  category=Announcements&amp;amp;
+  categoryId=DIC_kwDOQIvG_c4Cxnv0&amp;amp;
+  term=基于 Firefly 主题的 Astro 博客部署（四）：giscus 评论系统配置 - 未来之蓝 | xpfxzxc 的个人博客&amp;amp;
+  number=&amp;amp;
+  strict=0&amp;amp;
+  reactionsEnabled=1&amp;amp;
+  emitMetadata=1&amp;amp;
+  inputPosition=top&amp;amp;
+  theme=light&amp;amp;
+  description=记录了自己在基于 Firefly 主题的 Astro 博客上配置启用 giscus 评论系统，并简单总结了该评论系统的部分流程。&amp;amp;
+  backLink=http://localhost:4321/posts/astro-firefly-blog-deploy-part4/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;创建并加载 Iframe：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;// Set up iframe element
+const iframeElement = document.createElement(&apos;iframe&apos;);
+const iframeAttributes = {
+  class: &apos;giscus-frame giscus-frame--loading&apos;,
+  title: &apos;Comments&apos;,
+  scrolling: &apos;no&apos;,
+  allow: &apos;clipboard-write&apos;,
+  src,
+  loading,
+};
+Object.entries(iframeAttributes).forEach(
+  ([key, value]) =&amp;gt; value &amp;amp;&amp;amp; iframeElement.setAttribute(key, value),
+);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;iframe 开始加载，向 &lt;code&gt;giscus.app/widget&lt;/code&gt; 发起请求，并带上了所有配置参数和加密的 &lt;code&gt;session&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第九步：giscus Widget 服务端解密 Session 获取 Token&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;当 iframe 加载 &lt;code&gt;https://giscus.app/widget?...&lt;/code&gt; 时，由 &lt;strong&gt;Next.js&lt;/strong&gt; 的 &lt;code&gt;getServerSideProps&lt;/code&gt; 服务端处理。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;服务端接收参数：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;const session = (query.session as string) || &apos;&apos;;
+const repo = (query.repo as string) || &apos;&apos;;
+// ... 接收其他参数
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;解密 Session 获取 Access Token：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;const { encryption_password } = env;
+const token = await decodeState(session, encryption_password)
+  .catch(() =&amp;gt; getAppAccessToken(repo))
+  .catch(() =&amp;gt; &apos;&apos;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;服务端渲染 Widget：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;使用获取到的 &lt;code&gt;token&lt;/code&gt;，服务端可以调用 GitHub API 获取评论数据、用户信息等&lt;/li&gt;
+&lt;li&gt;将数据作为 props 传递给 React 组件，渲染出包含评论列表和评论框的完整 UI&lt;/li&gt;
+&lt;li&gt;服务端会设置重要的 CSP 头，确保 iframe 只能被授权的站点嵌入&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;第十步：前端 Token 的安全使用与消息通信&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Token 不暴露给父页面&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;解密出的真实 Access Token 仅存在于 giscus App 和它返回的 Widget 页面上下文中。Token 永远不会发送回博客站点的父页面脚本，从而避免了潜在的前端安全风险。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;基于 postMessage 的通信&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;当访客在 Iframe 的评论框中发表评论时，&amp;lt;u&amp;gt;iframe 内部的 giscus 代码会直接使用它拥有的 Token 去调用 GitHub API*&amp;lt;/u&amp;gt;。&lt;/p&gt;
+&lt;p&gt;iframe 与父页面之间通过 &lt;code&gt;postMessage&lt;/code&gt; 进行安全的跨域通信，仅传递 UI 状态，绝不传递 Access Token。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// Listen to messages
+window.addEventListener(&apos;message&apos;, (event) =&amp;gt; {
+  if (event.origin !== giscusOrigin) return;
+
+  const { data } = event;
+  if (!(typeof data === &apos;object&apos; &amp;amp;&amp;amp; data.giscus)) return;
+
+  if (data.giscus.resizeHeight) {
+    iframeElement.style.height = `${data.giscus.resizeHeight}px`;
+  }
+
+  if (data.giscus.signOut) {
+    localStorage.removeItem(GISCUS_SESSION_KEY);
+    console.log(`[giscus] User has logged out. Session has been cleared.`);
+    signOut();
+    return;
+  }
+  // ...
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;第十一步：用户状态维持与登出&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;只要 localStorage 中的加密 &lt;code&gt;session&lt;/code&gt; 不被清除，访客下次访问博客站点时，giscus 客户端会自动从 localStorage 读取 &lt;code&gt;session&lt;/code&gt; 并传递给 Widget，让访客保持登录状态。&lt;/p&gt;
+&lt;p&gt;当在 Widget 中点击登出时，iframe 会通过 &lt;code&gt;postMessage&lt;/code&gt; 发送一个 &lt;code&gt;signOut&lt;/code&gt; 指令。博客文章页面的 giscus 客户端收到后，会重置 iframe 的 &lt;code&gt;src&lt;/code&gt;（不带 session），强制重新加载为未登录状态，同时清理本地存储：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;function signOut() {
+  delete params.session;
+  const src = `${giscusOrigin}${locale}/widget?${new URLSearchParams(params)}`;
+  iframeElement.src = src; // Force reload
+}
+&lt;/code&gt;&lt;/pre&gt;
+</content:encoded></item><item><title>基于 Firefly 主题的 Astro 博客部署（三）：站点配置修改</title><link>https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part3/</link><guid isPermaLink="true">https://xpfxzxc.github.io/posts/astro-firefly-blog-deploy-part3/</guid><description>记录了自己在基于 Firefly 主题的 Astro 博客上修改个人名称、头像、介绍、公告、背景壁纸等配置的操作。</description><pubDate>Thu, 06 Nov 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;在成功地在 &lt;strong&gt;GitHub Pages&lt;/strong&gt; 上部署了博客，并紧接着在博客上发布文章后，看着自己撰写的文章被编排、美化成好看的页面显示在博客网站上，我的内心里瞬间有了以后在博客上撰写文章的动力。&lt;/p&gt;
 &lt;p&gt;目前，我的博客网站上包括个人名称、头像、介绍、公告、背景壁纸等在内的各种信息，仍是原 &lt;a href=&quot;https://github.com/CuteLeaf/Firefly&quot;&gt;&lt;strong&gt;Firefly&lt;/strong&gt;&lt;/a&gt; 主题作者预设的默认内容。我计划接下来逐步替换这些信息。毕竟，GitHub Pages 上的内容能够被搜索引擎收录的，作为博主，我当然不希望自己写的文章被他人阅读时，被误认为是他人所写；同时，也不希望博客中的其他信息与其他人雷同。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;src/config&lt;/code&gt; 目录下存放着博客的相关配置文件：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;src/
